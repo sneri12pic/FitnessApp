@@ -4,13 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import android.widget.ImageView;
 
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class ExerciseActivity extends AppCompatActivity {
     //Bottom Panel Buttons
@@ -56,21 +51,21 @@ public class ExerciseActivity extends AppCompatActivity {
         btn_running = findViewById(R.id.btn_runningimage);
         btn_running.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(ExerciseActivity.this, RunningActivity.class);
+                Intent intent = new Intent(ExerciseActivity.this, RunningJoggingActivity.class);
                 startActivity(intent);
             }
         });
         btn_hiking = findViewById(R.id.btn_hikingimage);
         btn_hiking.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(ExerciseActivity.this, RunningActivity.class);
+                Intent intent = new Intent(ExerciseActivity.this, RunningJoggingActivity.class);
                 startActivity(intent);
             }
         });
         btn_cycling = findViewById(R.id.btn_cyclingimage);
         btn_cycling.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(ExerciseActivity.this, RunningActivity.class);
+                Intent intent = new Intent(ExerciseActivity.this, RunningJoggingActivity.class);
                 startActivity(intent);
             }
         });
