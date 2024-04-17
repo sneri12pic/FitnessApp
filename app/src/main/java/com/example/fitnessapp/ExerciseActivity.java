@@ -12,6 +12,7 @@ public class ExerciseActivity extends AppCompatActivity {
     private Button profile;
     private Button home;
     private Button exercise;
+    private Button settings;
 
     //Exercise Buttons
     private Button btn_running;
@@ -21,48 +22,54 @@ public class ExerciseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
-//Bottom Panel ->
+
         home = findViewById(R.id.btn_home);
+        exercise = findViewById(R.id.btn_exercise);
+        profile = findViewById(R.id.btn_profile);
+        settings = findViewById(R.id.btn_settings);
+
+        btn_running = findViewById(R.id.btn_runningimage);
+        btn_hiking = findViewById(R.id.btn_hikingimage);
+        btn_cycling = findViewById(R.id.btn_cyclingimage);
+//Bottom Panel ->
         home.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(ExerciseActivity.this, HomeActivity.class);
                 startActivity(intent);
             }
         });
-
-        profile = findViewById(R.id.btn_profile);
         profile.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(ExerciseActivity.this, ProfileActivity.class);
                 startActivity(intent);
             }
         });
-
-        exercise = findViewById(R.id.btn_exercise);
         exercise.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(ExerciseActivity.this, ExerciseActivity.class);
                 startActivity(intent);
             }
         });
+        settings.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(ExerciseActivity.this, SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
 //end
-
 //ExerciseButtons
-        btn_running = findViewById(R.id.btn_runningimage);
         btn_running.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(ExerciseActivity.this, RunningJoggingActivity.class);
                 startActivity(intent);
             }
         });
-        btn_hiking = findViewById(R.id.btn_hikingimage);
         btn_hiking.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(ExerciseActivity.this, RunningJoggingActivity.class);
                 startActivity(intent);
             }
         });
-        btn_cycling = findViewById(R.id.btn_cyclingimage);
         btn_cycling.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(ExerciseActivity.this, RunningJoggingActivity.class);

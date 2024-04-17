@@ -15,6 +15,7 @@ public class HomeActivity extends AppCompatActivity {
     private Button profile;
     private Button home;
     private Button exercise;
+    private Button settings;
     private Button updateButton;
     private EditText editText;
     private TextView stepsCounterFilled;
@@ -29,6 +30,7 @@ public class HomeActivity extends AppCompatActivity {
         profile = findViewById(R.id.btn_profile);
         home = findViewById(R.id.btn_home);
         exercise = findViewById(R.id.btn_exercise);
+        settings = findViewById(R.id.btn_settings);
         updateButton = findViewById(R.id.btn_update);
 
         editText = findViewById(R.id.editText);
@@ -49,6 +51,12 @@ public class HomeActivity extends AppCompatActivity {
         exercise.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, ExerciseActivity.class);
+                startActivity(intent);
+            }
+        });
+        settings.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
                 startActivity(intent);
             }
         });
