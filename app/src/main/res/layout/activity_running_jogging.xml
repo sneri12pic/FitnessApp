@@ -196,7 +196,7 @@
                 android:layout_marginTop="55dp"
                 android:layout_marginLeft="35dp"
                 android:src="@drawable/text_running"
-                android:visibility="invisible"/>
+                android:visibility="visible"/>
         </RelativeLayout>
 
         <RelativeLayout
