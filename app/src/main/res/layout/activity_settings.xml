@@ -12,7 +12,6 @@
         android:layout_height="50dp"
         android:layout_marginLeft="15dp"
         android:src="@drawable/top_panel_settings"/>
-
     <ImageView
         android:id="@+id/dots_vector"
         android:layout_width="20dp"
@@ -21,6 +20,13 @@
         android:layout_marginTop="15dp"
         android:layout_marginEnd="10dp"
         android:src="@drawable/dots_vector" />
+    <ImageView
+        android:id="@+id/settings_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="22dp"
+        android:src="@drawable/settings_text_picture" />
     <Button
         android:id="@+id/btn_go_back"
         android:layout_width="50dp"
@@ -36,4 +42,71 @@
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
         android:alpha="0" />
+
+    <Button
+        android:id="@+id/btn_height"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="81dp"
+        android:layout_marginLeft="18dp"
+        android:alpha="0"/>
+    <Button
+        android:id="@+id/btn_weight"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="121dp"
+        android:layout_marginLeft="18dp"
+        android:alpha="0"/>
+    <Button
+        android:id="@+id/btn_distance"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="158dp"
+        android:layout_marginLeft="18dp"
+        android:alpha="0"/>
+    <Button
+        android:id="@+id/btn_energy"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="198dp"
+        android:layout_marginLeft="18dp"
+        android:alpha="0"/>
+    <Button
+        android:id="@+id/btn_theme"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="263dp"
+        android:layout_marginLeft="18dp"
+        android:alpha="0"/>
+
+    <EditText
+        android:id="@+id/et_height"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="85dp"
+        android:layout_marginLeft="90dp"
+        android:gravity="center_horizontal"
+        android:inputType="numberDecimal"
+        android:background="@drawable/edit_text_background"/>
+
+    <EditText
+        android:id="@+id/et_weight"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="125dp"
+        android:layout_marginLeft="90dp"
+        android:gravity="center_horizontal"
+        android:inputType="numberDecimal"
+        android:background="@drawable/edit_text_background"/>
+
+    <EditText
+        android:id="@+id/et_energy"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="203dp"
+        android:layout_marginLeft="90dp"
+        android:gravity="center_horizontal"
+        android:inputType="numberDecimal"
+        android:background="@drawable/edit_text_background"/>
+
 </RelativeLayout>
