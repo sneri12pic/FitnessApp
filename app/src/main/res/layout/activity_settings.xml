@@ -7,7 +7,33 @@
     android:background="@drawable/background">
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:id="@+id/image_go_back"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="15dp"
         android:src="@drawable/top_panel_settings"/>
+
+    <ImageView
+        android:id="@+id/dots_vector"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/dots_vector" />
+    <Button
+        android:id="@+id/btn_go_back"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="5dp"
+        android:alpha="0"/>
+    <Button
+        android:id="@+id/btn_more"
+        android:layout_width="30dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:alpha="0" />
 </RelativeLayout>

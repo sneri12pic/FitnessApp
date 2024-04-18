@@ -66,7 +66,7 @@ public class ExerciseActivity extends AppCompatActivity {
         });
         btn_hiking.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(ExerciseActivity.this, RunningJoggingActivity.class);
+                Intent intent = new Intent(ExerciseActivity.this, HikingActivity.class);
                 startActivity(intent);
             }
         });
