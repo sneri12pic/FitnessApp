@@ -11,14 +11,7 @@
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"
         android:src="@drawable/name" />
-    <ImageView
-        android:id="@+id/panel_search"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_below="@id/name"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/panel_search" />
+
     <ImageView
         android:id="@+id/circle_goal"
         android:layout_width="292dp"
