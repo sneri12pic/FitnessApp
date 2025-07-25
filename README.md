@@ -9,7 +9,7 @@ This Fitness Application is inspired by the robust features and user-friendly de
 ## Key Features
 
 *  **Calorie Counter:** Editable and updatable via the Home screen.
-* 🗂 **Workout Options:** Running/Jogging, Hiking, and Cycling.
+*  **Workout Options:** Running/Jogging, Hiking, and Cycling.
 *  **Profile Tracking:** Track completed workouts and sort them by day.
 *  **Check Buttons:** Mark workouts as done — totals are updated in the Profile.
 *  **Calm UI:** Creamy pink colors and soft gradients for eye comfort.
@@ -34,7 +34,7 @@ The app consists of **8 classes** and corresponding XML layouts:
 
 ---
 
-## 🏞Workouts Breakdown
+## Workouts Breakdown
 
 * **Running/Jogging:**
   Click an image to access Running/Jogging workouts. Each rectangle is a dropdown with workouts inside. Margins keep layout aligned.
@@ -74,13 +74,13 @@ The app consists of **8 classes** and corresponding XML layouts:
 
 ---
 
-## 📷 Screenshots
+## Screenshots
 
 *(Add screenshots of Home, Exercise, Profile screens here if possible)*
 
 ---
 
-## 🔗 Image Sources
+## Image Sources
 
 * Running: [Runner's World](https://www.runnersworld.com/uk/health/a39979994/things-ive-learned-about-pain-management-as-a-runner)
 * Hiking:
