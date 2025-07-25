@@ -34,7 +34,7 @@ The app consists of **8 classes** and corresponding XML layouts:
 
 ---
 
-## 🏞️ Workouts Breakdown
+## 🏞Workouts Breakdown
 
 * **Running/Jogging:**
   Click an image to access Running/Jogging workouts. Each rectangle is a dropdown with workouts inside. Margins keep layout aligned.
@@ -47,7 +47,7 @@ The app consists of **8 classes** and corresponding XML layouts:
 
 ---
 
-## 📂 Installation
+## Installation
 
 1. **Clone the repo:**
 
@@ -94,7 +94,7 @@ The app consists of **8 classes** and corresponding XML layouts:
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 **Stepan Demianenko**
 **stepan.demyanenko30@gmail.com**
@@ -102,6 +102,6 @@ The app consists of **8 classes** and corresponding XML layouts:
 
 ---
 
-## 📜 License
+## License
 
 *This project is for academic purposes only.*
