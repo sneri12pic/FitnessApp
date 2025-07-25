@@ -2,15 +2,16 @@ package com.example.fitnessapp;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
+import java.util.Arrays;
+import java.util.List;
 
 public class SettingsActivity extends AppCompatActivity {
-    private Button goBack;
-    private Button btnHeight, btnWeight, btnEnergy;
     private EditText etHeight, etWeight, etEnergy;
     private SharedPreferences sharedPreferences;
 
@@ -20,11 +21,18 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         // Initialize views
-        goBack = findViewById(R.id.btn_go_back);
-        btnHeight = findViewById(R.id.btn_height);
-        btnWeight = findViewById(R.id.btn_weight);
-        btnEnergy = findViewById(R.id.btn_energy);
+        Button goBack = findViewById(R.id.btn_go_back);
+        Button btnHeight = findViewById(R.id.btn_height);
+        Button btnWeight = findViewById(R.id.btn_weight);
+        Button btnEnergy = findViewById(R.id.btn_energy);
+        Button btnTheme = findViewById(R.id.btn_theme);
 
+        //Drop List for themes
+        List<String> themes = Arrays.asList("Pink", "Dark");
+        Spinner themeSpinner = findViewById(R.id.theme_spinner);
+
+        ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_item, themes);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
 
         etHeight = findViewById(R.id.et_height);
         etWeight = findViewById(R.id.et_weight);
@@ -40,30 +48,13 @@ public class SettingsActivity extends AppCompatActivity {
         etEnergy.setText(sharedPreferences.getString("energy", ""));
 
         // Set click listeners for buttons
-        goBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        goBack.setOnClickListener(v -> onBackPressed());
 
-        btnHeight.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                etHeight.setText("Button Height Clicked");
-            }
-        });
+        btnHeight.setOnClickListener(v -> etHeight.setText("Button Height Clicked"));
 
-        btnWeight.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                etWeight.setText("Button Weight Clicked");
-            }
-        });
+        btnWeight.setOnClickListener(v -> etWeight.setText("Button Weight Clicked"));
 
-        btnEnergy.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                etEnergy.setText("Button Energy Clicked");
-            }
-        });
+        btnEnergy.setOnClickListener(v -> etEnergy.setText("Button Energy Clicked"));
     }
 
     @Override
@@ -72,9 +63,9 @@ public class SettingsActivity extends AppCompatActivity {
 
         // Save EditText values to SharedPreferences
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("height", etHeight.getText().toString());
-        editor.putString("weight", etWeight.getText().toString());
-        editor.putString("energy", etEnergy.getText().toString());
+        SharedPreferences.Editor height = editor.putString("height", etHeight.getText().toString());
+        SharedPreferences.Editor weight = editor.putString("weight", etWeight.getText().toString());
+        SharedPreferences.Editor energy = editor.putString("energy", etEnergy.getText().toString());
         editor.apply();
     }
 }
