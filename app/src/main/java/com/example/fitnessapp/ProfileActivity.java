@@ -2,27 +2,37 @@ package com.example.fitnessapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint; //-------------------------------------------------------------
+
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import java.util.Calendar;
 
 public class ProfileActivity extends AppCompatActivity {
     // Exercise Panel
-    private ImageView panelImage;
+
     // Func to convert values dp to px
     private int dpToPx(int dp) {
         float density = getResources().getDisplayMetrics().density;
         return (int) (dp * density + 0.5f);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        // Profile Picture
+        ImageView profilePic = findViewById(R.id.img_profilePic);
 
         // Bottom Panel
         Button home = findViewById(R.id.btn_home);
@@ -30,7 +40,7 @@ public class ProfileActivity extends AppCompatActivity {
         Button profile = findViewById(R.id.btn_profile);
         Button settings = findViewById(R.id.btn_settings);
 
-        panelImage = findViewById(R.id.img_panel);
+        ImageView panelImage = findViewById(R.id.img_panel);
 
         Button btn_panelMonday = findViewById(R.id.btn_panelMonday);
         Button btn_panelTuesday = findViewById(R.id.btn_panelTuesday);
@@ -40,6 +50,27 @@ public class ProfileActivity extends AppCompatActivity {
         Button btn_panelSaturday = findViewById(R.id.btn_panelSaturday);
         Button btn_panelSunday = findViewById(R.id.btn_panelSunday);
 
+        // Set Profile Picture
+        profilePic.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                Animation scaleUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.scale_up);
+                v.startAnimation(scaleUp);
+            } else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                Animation scaleDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.scale_down);
+                v.startAnimation(scaleDown);
+            }
+            return false;
+        });
+
+        profilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+             public void onClick(View v){
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, 1);
+            }
+        });
+        
         // Get the current LayoutParams
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) panelImage.getLayoutParams();
 
@@ -127,4 +158,16 @@ public class ProfileActivity extends AppCompatActivity {
         startActivity(intent);
     }
 //---------------------------------------------------------------------------------------------------------------<
+    // Handles the result of Picture Upload
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+            Uri selectedImage = data.getData();
+            ImageView profilePicture = findViewById(R.id.img_profilePic);
+            profilePicture.setImageURI(selectedImage);
+
+            // Optional: Save it using SharedPreferences or store the URI in your database.
+        }
+    }
 }
