@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     tools:context=".ProfileActivity"
     android:background="@drawable/background">
@@ -13,14 +12,13 @@
         android:layout_height="155dp"
         android:layout_marginTop="0dp"
         android:src="@drawable/profilepanelbox" />
-    <com.google.android.material.imageview.ShapeableImageView
+    <ImageView
         android:id="@+id/img_profilePic"
         android:layout_width="125dp"
         android:layout_height="125dp"
         android:layout_marginTop="75dp"
         android:layout_marginLeft="145dp"
         android:src="@drawable/profile_icon_picture"
-        app:shapeAppearanceOverlay="@style/CircleImageView"
         android:scaleType="centerCrop"/>
     <ImageView
         android:id="@+id/exercisebox"

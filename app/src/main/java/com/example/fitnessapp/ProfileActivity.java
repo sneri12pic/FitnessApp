@@ -1,8 +1,11 @@
 package com.example.fitnessapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 
-import android.annotation.SuppressLint; //-------------------------------------------------------------
+import android.annotation.SuppressLint;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -14,10 +17,16 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import com.example.fitnessapp.dao.UserProfileDao;
+import com.example.fitnessapp.db.AppDatabase;
+import com.example.fitnessapp.model.UserProfile;
+
 import java.util.Calendar;
 
 public class ProfileActivity extends AppCompatActivity {
-    // Exercise Panel
+
+    private UserProfileDao dao;
 
     // Func to convert values dp to px
     private int dpToPx(int dp) {
@@ -31,14 +40,28 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        // Create an instance of database(To Save Image URI)
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "fitness-db").allowMainThreadQueries().build();
+        dao = db.userProfileDao();
+
         // Profile Picture
         ImageView profilePic = findViewById(R.id.img_profilePic);
+        UserProfile savedProfile = dao.getProfile();
+        if (savedProfile != null && savedProfile.photoUri != null) {
+            Uri savedUri = Uri.parse(savedProfile.photoUri);
+            Glide.with(this)
+                    .load(savedUri)
+                    .transform(new CircleCrop())
+                    .placeholder(R.drawable.profile_icon_picture)  // Or your default placeholder
+                    .into(profilePic);
+        }
 
         // Bottom Panel
-        Button home = findViewById(R.id.btn_home);
-        Button exercise = findViewById(R.id.btn_exercise);
-        Button profile = findViewById(R.id.btn_profile);
-        Button settings = findViewById(R.id.btn_settings);
+        Button homeBtn = findViewById(R.id.btn_home);
+        Button exerciseBtn = findViewById(R.id.btn_exercise);
+        Button profileBtn = findViewById(R.id.btn_profile);
+        Button settingsBtn = findViewById(R.id.btn_settings);
 
         ImageView panelImage = findViewById(R.id.img_panel);
 
@@ -50,7 +73,7 @@ public class ProfileActivity extends AppCompatActivity {
         Button btn_panelSaturday = findViewById(R.id.btn_panelSaturday);
         Button btn_panelSunday = findViewById(R.id.btn_panelSunday);
 
-        // Set Profile Picture
+        // Set Profile Picture Animation
         profilePic.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 Animation scaleUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.scale_up);
@@ -62,14 +85,11 @@ public class ProfileActivity extends AppCompatActivity {
             return false;
         });
 
-        profilePic.setOnClickListener(new View.OnClickListener() {
-            @Override
-             public void onClick(View v){
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(intent, 1);
-            }
-        });
+        profilePic.setOnClickListener(v -> {
+           Intent intent = new Intent(Intent.ACTION_PICK);
+           intent.setType("image/*");
+           startActivityForResult(intent, 1);
+       });
         
         // Get the current LayoutParams
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) panelImage.getLayoutParams();
@@ -135,20 +155,20 @@ public class ProfileActivity extends AppCompatActivity {
 //---------------------------------------------------------------------------------------------------------------<
 
 //---------------------------------------------------------------------------------------------------------------Buttons Bottom Panel
-        home.setOnClickListener(v -> {
+        homeBtn.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileActivity.this, HomeActivity.class);
             startActivity(intent);
         });
 
-        profile.setOnClickListener(v -> {
+        profileBtn.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileActivity.this, ProfileActivity.class);
             startActivity(intent);
         });
-        exercise.setOnClickListener(v -> {
+        exerciseBtn.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileActivity.this, ExerciseActivity.class);
             startActivity(intent);
         });
-        settings.setOnClickListener(v -> {
+        settingsBtn.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileActivity.this, SettingsActivity.class);
             startActivity(intent);
         });
@@ -165,9 +185,27 @@ public class ProfileActivity extends AppCompatActivity {
         if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
             Uri selectedImage = data.getData();
             ImageView profilePicture = findViewById(R.id.img_profilePic);
-            profilePicture.setImageURI(selectedImage);
+            Glide.with(this)
+                    .load(selectedImage)
+                    .transform(new CircleCrop())
+                    .placeholder(R.drawable.profile_icon_picture)
+                    .into(profilePicture);
 
-            // Optional: Save it using SharedPreferences or store the URI in your database.
+
+            // Store image URI in Room database
+            UserProfile profile = new UserProfile();
+            profile.id = 1; // Always 1 if you have only one user
+            profile.name = "Alex";
+            profile.photoUri = selectedImage.toString(); // From image picker
+
+            dao.insertProfile(profile);
+
+            UserProfile savedProfile = dao.getProfile();
+            if (savedProfile != null && savedProfile.photoUri != null) {
+                Uri savedUri = Uri.parse(savedProfile.photoUri);
+                profilePicture.setImageURI(savedUri);
+            }
+
         }
     }
 }
