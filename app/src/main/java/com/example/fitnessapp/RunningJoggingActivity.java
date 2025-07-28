@@ -9,6 +9,13 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 public class RunningJoggingActivity extends AppCompatActivity {
+
+    // Func to convert values dp to px
+    private int dpToPx(int dp) {
+        float density = getResources().getDisplayMetrics().density;
+        return (int) (dp * density + 0.5f);
+    }
+
     // Bottom Panel Buttons--------------------------------
     private Button profile;
     private Button home;
@@ -33,11 +40,13 @@ public class RunningJoggingActivity extends AppCompatActivity {
     // Initial top margin for jogging details container
     private final int INITIAL_JOGGING_MARGIN_TOP = 310;
     private boolean isRunningActivityOpen = false;
+    private boolean isJoggingActivityOpen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_running_jogging);
+
         // Bottom Panel Buttons-------------------
         home = findViewById(R.id.btn_home);
         profile = findViewById(R.id.btn_profile);
@@ -57,73 +66,90 @@ public class RunningJoggingActivity extends AppCompatActivity {
         joggingDetailsContainer = findViewById(R.id.jogging_details_container);
         joggingDetailsTitle = findViewById(R.id.jogging_title);
         // Bottom Panel Buttons-------------------
-        home.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(RunningJoggingActivity.this, HomeActivity.class);
-                startActivity(intent);
-            }
+        home.setOnClickListener(v -> {
+            Intent intent = new Intent(RunningJoggingActivity.this, HomeActivity.class);
+            startActivity(intent);
         });
-        profile.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(RunningJoggingActivity.this, ProfileActivity.class);
-                startActivity(intent);
-            }
+        profile.setOnClickListener(v -> {
+            Intent intent = new Intent(RunningJoggingActivity.this, ProfileActivity.class);
+            startActivity(intent);
         });
-        exercise.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(RunningJoggingActivity.this, ExerciseActivity.class);
-                startActivity(intent);
-            }
+        exercise.setOnClickListener(v -> {
+            Intent intent = new Intent(RunningJoggingActivity.this, ExerciseActivity.class);
+            startActivity(intent);
         });
-        settings.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(RunningJoggingActivity.this, SettingsActivity.class);
-                startActivity(intent);
-            }
+        settings.setOnClickListener(v -> {
+            Intent intent = new Intent(RunningJoggingActivity.this, SettingsActivity.class);
+            startActivity(intent);
         });
         // Running/Jogging Buttons----------------
+        RelativeLayout.MarginLayoutParams paramsJogCon = (RelativeLayout.MarginLayoutParams) joggingDetailsContainer.getLayoutParams();
+
+        RelativeLayout.MarginLayoutParams imageOpenedJogDet = (RelativeLayout.MarginLayoutParams) joggingDetailsImageOpen.getLayoutParams();
+
         runningButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleRunningDetails();
+                //toggleRunningDetails();
+                if (runningDetailsContainer.getVisibility() == View.VISIBLE) {
+                    // Running activity is closed
+                    isRunningActivityOpen = false;
+                    // Adjust margin for jogging button
+                    adjustJoggingButtonMargin(INITIAL_JOGGING_MARGIN_TOP);
+                    // If running details are visible, hide them
+                    runningDetailsContainer.setVisibility(View.INVISIBLE);
+                    runningDetailsImageOpen.setVisibility(View.INVISIBLE);
+                    runningDetailsText.setVisibility(View.INVISIBLE);
+                    runningDetailsImageClosed.setVisibility(View.VISIBLE);
+
+                    paramsJogCon.setMargins(dpToPx(0), dpToPx(420), 0, 0);
+                    joggingDetailsContainer.setLayoutParams(paramsJogCon);
+
+                    imageOpenedJogDet.setMargins(dpToPx(0), dpToPx(0), 0, 0);
+                    joggingDetailsImageClosed.setLayoutParams(imageOpenedJogDet);
+                }
+                else
+                {
+                    // Running activity is open
+                    isRunningActivityOpen = true;
+                    // If running details are not visible, show them
+                    runningDetailsContainer.setVisibility(View.VISIBLE);
+                    runningDetailsImageOpen.setVisibility(View.VISIBLE);
+                    runningDetailsText.setVisibility(View.VISIBLE);
+                    runningDetailsImageClosed.setVisibility(View.INVISIBLE);
+
+                    paramsJogCon.setMargins(dpToPx(0), dpToPx(730), 0, 0);
+                    joggingDetailsContainer.setLayoutParams(paramsJogCon);
+
+                    imageOpenedJogDet.setMargins(dpToPx(0), dpToPx(0), 0, 0);
+                    joggingDetailsImageClosed.setLayoutParams(imageOpenedJogDet);
+                }
             }
         });
-        joggingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleJoggingDetails();
+
+        joggingButton.setOnClickListener(v -> {
+            if (joggingDetailsImageClosed.getVisibility() == View.VISIBLE) {
+                isJoggingActivityOpen = false;
+                joggingDetailsContainer.setVisibility(View.VISIBLE);
+                joggingDetailsImageOpen.setVisibility(View.VISIBLE);
+                joggingDetailsImageClosed.setVisibility(View.INVISIBLE);
+
+                joggingDetailsText.setVisibility(View.VISIBLE);
+            } else {
+                isJoggingActivityOpen = true;
+                // If jogging details are not visible, show them
+                joggingDetailsContainer.setVisibility(View.VISIBLE);
+                joggingDetailsImageOpen.setVisibility(View.INVISIBLE);
+                joggingDetailsImageClosed.setVisibility(View.VISIBLE);
+
+                joggingDetailsText.setVisibility(View.INVISIBLE);
             }
         });
     }
-    private void toggleRunningDetails() {
-        // Toggle visibility of running details
-        if (runningDetailsContainer.getVisibility() == View.VISIBLE) {
-            // Running activity is closed
-            isRunningActivityOpen = false;
-            // Adjust margin for jogging button
-            adjustJoggingButtonMargin(INITIAL_JOGGING_MARGIN_TOP);
-            // If running details are visible, hide them
-            runningDetailsContainer.setVisibility(View.INVISIBLE);
-            runningDetailsImageOpen.setVisibility(View.INVISIBLE);
-            runningDetailsText.setVisibility(View.INVISIBLE);
-            runningDetailsImageClosed.setVisibility(View.VISIBLE);
-            // Restore default margin for jogging button
-            adjustJoggingButtonMargin(INITIAL_JOGGING_MARGIN_TOP);
-            // Ensure jogging details are closed
-            //closeJoggingDetails();
-        } else {
-            // Running activity is open
-            isRunningActivityOpen = true;
-            // If running details are not visible, show them
-            runningDetailsContainer.setVisibility(View.VISIBLE);
-            runningDetailsImageOpen.setVisibility(View.VISIBLE);
-            runningDetailsText.setVisibility(View.VISIBLE);
-            runningDetailsImageClosed.setVisibility(View.INVISIBLE);
-            // Adjust margin for jogging button
-            int runningDetailsHeight = runningDetailsContainer.getHeight();
-            adjustJoggingButtonMargin(runningDetailsHeight+50);
-        }
-    }
+
+
+    /*
+
     public void toggleJoggingDetails() {
         // Toggle visibility of jogging details
         if (joggingDetailsContainer.getVisibility() == View.VISIBLE) {
@@ -145,9 +171,15 @@ public class RunningJoggingActivity extends AppCompatActivity {
             }
         }
     }
+    */
+
+
     //Adjustment For The Jogging Tab
     private void adjustJoggingButtonMargin(int marginTop) {
+        /*
+
         // Adjust the margins for all elements within the jogging details container
+
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) joggingDetailsContainer.getLayoutParams();
         layoutParams.setMargins(0, marginTop + 550, 0, 0);
         joggingDetailsContainer.setLayoutParams(layoutParams);
@@ -166,5 +198,7 @@ public class RunningJoggingActivity extends AppCompatActivity {
         RelativeLayout.LayoutParams button1LayoutParams = (RelativeLayout.LayoutParams) joggingButton.getLayoutParams();
         button1LayoutParams.setMargins(0, marginTop, 0, 0);
         joggingButton.setLayoutParams(button1LayoutParams);
+
+        */
     }
 }
