@@ -73,7 +73,7 @@
             android:src="@drawable/circlegoal"
             android:visibility="visible"/>
         <EditText
-            android:id="@+id/inputLimit"
+            android:id="@+id/input_limit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Set Calorie Limit"
@@ -140,51 +140,6 @@
             android:layout_gravity="center"
             android:layout_marginTop="70dp"
             android:layout_centerHorizontal="true"/>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="295dp">
-
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center_horizontal"
-            android:textSize="24sp"
-            android:textColor="#4F2912"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:shadowRadius="10"
-            android:hint="Enter a number"
-            android:background="@android:color/transparent"
-            android:visibility="invisible"/>
-        <TextView
-            android:id="@+id/steps_counter_filled"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="25dp"
-            android:text="0000"
-            android:textSize="24dp"
-            android:textColor="#4F2912"
-            android:shadowColor="#4F2912"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:shadowRadius="10"
-            android:visibility="invisible"/>
-        <TextView
-            android:id="@+id/steps_counter_filled_stroked"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="25dp"
-            android:text="0000"
-            android:textSize="24sp"
-            android:textColor="#F5DBCB"
-            android:visibility="invisible"/>
     </RelativeLayout>
 
     <RelativeLayout

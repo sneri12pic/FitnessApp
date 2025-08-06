@@ -1,132 +1,165 @@
 package com.example.fitnessapp;
 
-import android.content.Context;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
+
+import com.example.fitnessapp.dao.CaloriesTrackerDao;
+import com.example.fitnessapp.dao.UserProfileDao;
+import com.example.fitnessapp.db.AppDatabase;
+import com.example.fitnessapp.model.CaloriesTracker;
+import com.example.fitnessapp.model.UserProfile;
+
+import java.util.Date;
+import java.util.List;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class HomeActivity extends AppCompatActivity {
-    private Button profile;
-    private Button home;
-    private Button exercise;
-    private Button settings;
-    private Button updateButton;
-    private EditText editText;
-    private TextView stepsCounterFilled;
-    private TextView stepsCounterFilledStroked;
+
+    private CaloriesTrackerDao daoCalories;
+    private UserProfileDao daoProfile;
+    private UserProfile currentUser;
+    private int caloriesLimit;
+    private float percent;
 
     private EditText inputLimit, inputCalories;
     private TextView statusText;
     private GaugeView gaugeView;
-    private int calorieLimit = 2000;
-    private int consumedCalories = 0;
     private ImageView imgAddFood;
 
+    private Button btnAddFood, updateButton;
     private boolean isEditTextVisible = false;
+    private int consumedCalories = 0;
+    private int calFood = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        profile = findViewById(R.id.btn_profile);
-        home = findViewById(R.id.btn_home);
-        exercise = findViewById(R.id.btn_exercise);
-        settings = findViewById(R.id.btn_settings);
-        updateButton = findViewById(R.id.btn_update);
+        // Create an instance of database(To Save CaloriesTracker data)
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "fitness_db")
+                .addMigrations(AppDatabase.MIGRATION_1_2)
+                .build();
 
-        editText = findViewById(R.id.editText);
-        stepsCounterFilled = findViewById(R.id.steps_counter_filled);
-        stepsCounterFilledStroked = findViewById(R.id.steps_counter_filled_stroked);
+        daoCalories = db.caloriesTrackerDao();
+        daoProfile = db.userProfileDao();
 
-        inputLimit = findViewById(R.id.inputLimit);
+        CaloriesTracker caloriesTracker = new CaloriesTracker();
+
+        // Calorie Tracker UI binders
+        inputLimit = findViewById(R.id.input_limit);
         inputCalories = findViewById(R.id.inputCalories);
         statusText = findViewById(R.id.statusText);
         gaugeView = findViewById(R.id.gaugeView);
         imgAddFood = findViewById(R.id.img_add_food);
+        btnAddFood = findViewById(R.id.btnAddFood);
+        updateButton = findViewById(R.id.btn_update);
 
-        Button btnAddFood = findViewById(R.id.btnAddFood);
-        btnAddFood.setOnClickListener(v -> {
-            String foodStr = inputCalories.getText().toString();
-            if (!foodStr.isEmpty()) {
-                consumedCalories += Integer.parseInt(foodStr);
-            }
-            inputCalories.setText("");
-            float percent = (float) consumedCalories / calorieLimit;
-            gaugeView.setPercent(percent);
-            statusText.setText("Calories: " + consumedCalories + " / " + calorieLimit);
-        });
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            // Check if user exists
+            List<UserProfile> allUsers = daoProfile.getAllProfiles();
+            if (allUsers.isEmpty()) {
+                // Create default user
+                UserProfile newUser = new UserProfile();
+                newUser.name = "Alex";
+                newUser.caloriesLimit = 2000; // default limit
+                daoProfile.insertProfile(newUser);
 
-        profile.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
-                startActivity(intent);
+                allUsers = daoProfile.getAllProfiles();
             }
-        });
-        home.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, HomeActivity.class);
-                startActivity(intent);
-            }
-        });
-        exercise.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, ExerciseActivity.class);
-                startActivity(intent);
-            }
-        });
-        settings.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
-                startActivity(intent);
-            }
-        });
-        updateButton.setOnClickListener(v -> {
-            if (!isEditTextVisible) {
-                inputCalories.setVisibility(View.INVISIBLE);
-                btnAddFood.setVisibility(View.INVISIBLE);
-                imgAddFood.setVisibility(View.INVISIBLE);
-                inputLimit.setVisibility(View.VISIBLE);
 
-                // Get text from the EditText
-                String inputText = editText.getText().toString();
-                // Set the input text to the TextViews
-                stepsCounterFilled.setText(inputText);
-                stepsCounterFilledStroked.setText(inputText);
-                // Show the TextViews and hide the EditText
-                stepsCounterFilled.setVisibility(View.VISIBLE);
-                stepsCounterFilledStroked.setVisibility(View.VISIBLE);
-                editText.setVisibility(View.INVISIBLE);
-                // Clear focus and hide the keyboard
-                editText.clearFocus();
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                // Update the flag
-                isEditTextVisible = true;
-            } else {
-                String limitStr = inputLimit.getText().toString();
+            // Use the first user
+            currentUser = allUsers.get(0);
+            int currentUserId = currentUser.id;
+            caloriesLimit = currentUser.caloriesLimit;
 
-                if (!limitStr.isEmpty()) {
-                    calorieLimit = Integer.parseInt(limitStr);
-                }
-                float percent = (float) consumedCalories / calorieLimit;
+            // Load consumed calories for this user
+            List<CaloriesTracker> entries = daoCalories.getEntriesForUser(currentUserId);
+            consumedCalories = 0;
+            for (CaloriesTracker entry : entries) {
+                consumedCalories += entry.calories;
+            }
+            percent = (float) consumedCalories / caloriesLimit;
+
+            // Update UI on main thread
+            runOnUiThread(() -> {
                 gaugeView.setPercent(percent);
-                statusText.setText("Calories: " + consumedCalories + " / " + calorieLimit);
-                inputCalories.setVisibility(View.VISIBLE);
-                btnAddFood.setVisibility(View.VISIBLE);
-                imgAddFood.setVisibility(View.VISIBLE);
-                inputLimit.setVisibility(View.INVISIBLE);
+                statusText.setText("Calories: " + consumedCalories + " / " + caloriesLimit);
 
-                // Update the flag
-                isEditTextVisible = false;
-            }
+                // Safe to use userProfile and daoProfile
+                btnAddFood.setOnClickListener(v -> {
+
+                    String foodStr = inputCalories.getText().toString();
+                    if (!foodStr.isEmpty()) {
+                        calFood = Integer.parseInt(foodStr);
+
+                        // Insert consumed calories to DataBase
+                        CaloriesTracker newEntry = new CaloriesTracker();
+
+                        newEntry.calories = calFood;
+                        consumedCalories += calFood;
+                        newEntry.date = new Date();
+                        newEntry.userId = currentUserId;
+                        executor.execute(() -> daoCalories.insert(newEntry));
+
+                        inputCalories.setText("");
+                        percent = (float) consumedCalories / caloriesLimit;
+                        gaugeView.setPercent(percent);
+                        statusText.setText("Calories: " + consumedCalories + " / " + caloriesLimit);
+                    }
+                });
+                updateButton.setOnClickListener(v -> {
+                    if (!isEditTextVisible) {
+                        inputCalories.setVisibility(View.INVISIBLE);
+                        btnAddFood.setVisibility(View.INVISIBLE);
+                        imgAddFood.setVisibility(View.INVISIBLE);
+                        inputLimit.setVisibility(View.VISIBLE);
+
+                        // Update the flag
+                        isEditTextVisible = true;
+                    } else {
+                        // Input Calories Limit to Database
+                        String limitStr = inputLimit.getText().toString();
+
+                        if (!limitStr.isEmpty()) {
+                            currentUser.caloriesLimit = Integer.parseInt(limitStr);
+
+                            // Inset Calories Limit to DataBase
+                            executor.execute(() -> daoProfile.update(currentUser));
+                            caloriesLimit = currentUser.caloriesLimit;
+                        }
+                        percent = (float) consumedCalories / caloriesLimit;
+                        gaugeView.setPercent(percent);
+                        statusText.setText("Calories: " + consumedCalories + " / " + caloriesLimit);
+                        inputCalories.setVisibility(View.VISIBLE);
+                        btnAddFood.setVisibility(View.VISIBLE);
+                        imgAddFood.setVisibility(View.VISIBLE);
+                        inputLimit.setVisibility(View.INVISIBLE);
+
+                        // Update the flag
+                        isEditTextVisible = false;
+                    }
+                });
+            });
         });
+
+        // Bottom panel navigation
+        findViewById(R.id.btn_profile).setOnClickListener(v -> startActivity(new Intent(this, ProfileActivity.class)));
+        findViewById(R.id.btn_home).setOnClickListener(v -> startActivity(new Intent(this, HomeActivity.class)));
+        findViewById(R.id.btn_exercise).setOnClickListener(v -> startActivity(new Intent(this, ExerciseActivity.class)));
+        findViewById(R.id.btn_settings).setOnClickListener(v -> startActivity(new Intent(this, SettingsActivity.class)));
     }
     public void goToProfileActivity(View view) {
         Intent intent = new Intent(this, ProfileActivity.class);

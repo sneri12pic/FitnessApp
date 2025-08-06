@@ -7,7 +7,9 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 
 import android.annotation.SuppressLint;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -23,10 +25,14 @@ import com.example.fitnessapp.db.AppDatabase;
 import com.example.fitnessapp.model.UserProfile;
 
 import java.util.Calendar;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class ProfileActivity extends AppCompatActivity {
 
     private UserProfileDao dao;
+    private UserProfile currentUser;
+    private final Executor executor = Executors.newSingleThreadExecutor();
 
     // Func to convert values dp to px
     private int dpToPx(int dp) {
@@ -41,27 +47,39 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         // Create an instance of database(To Save Image URI)
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "fitness-db").allowMainThreadQueries().build();
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "fitness_db")
+                .addMigrations(AppDatabase.MIGRATION_1_2)
+                .build();
+        
         dao = db.userProfileDao();
 
         // Profile Picture
         ImageView profilePic = findViewById(R.id.img_profilePic);
-        UserProfile savedProfile = dao.getProfile();
-        if (savedProfile != null && savedProfile.photoUri != null) {
-            Uri savedUri = Uri.parse(savedProfile.photoUri);
-            Glide.with(this)
-                    .load(savedUri)
-                    .transform(new CircleCrop())
-                    .placeholder(R.drawable.profile_icon_picture)  // Or your default placeholder
-                    .into(profilePic);
-        }
 
-        // Bottom Panel
-        Button homeBtn = findViewById(R.id.btn_home);
-        Button exerciseBtn = findViewById(R.id.btn_exercise);
-        Button profileBtn = findViewById(R.id.btn_profile);
-        Button settingsBtn = findViewById(R.id.btn_settings);
+        executor.execute(() -> {
+            // Load first user (same as HomeActivity)
+            if (dao.getAllProfiles().isEmpty()) {
+                UserProfile newUser = new UserProfile();
+                newUser.name = "Alex";
+                newUser.caloriesLimit = 2000;
+                long newId = dao.insertProfile(newUser);
+                newUser.id = (int) newId;
+                currentUser = newUser;
+            } else {
+                currentUser = dao.getAllProfiles().get(0);
+            }
+            // Update UI on main thread
+            runOnUiThread(() -> {
+                if (currentUser.photoUri != null) {
+                    Uri savedUri = Uri.parse(currentUser.photoUri);
+                    Glide.with(this)
+                            .load(savedUri)
+                            .transform(new CircleCrop())
+                            .placeholder(R.drawable.profile_icon_picture)  // Or your default placeholder
+                            .into(profilePic);
+                }
+            });
+        });
 
         ImageView panelImage = findViewById(R.id.img_panel);
 
@@ -155,28 +173,14 @@ public class ProfileActivity extends AppCompatActivity {
 //---------------------------------------------------------------------------------------------------------------<
 
 //---------------------------------------------------------------------------------------------------------------Buttons Bottom Panel
-        homeBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(ProfileActivity.this, HomeActivity.class);
-            startActivity(intent);
-        });
+        // Bottom panel buttons
+        findViewById(R.id.btn_home).setOnClickListener(v -> startActivity(new Intent(this, HomeActivity.class)));
+        findViewById(R.id.btn_exercise).setOnClickListener(v -> startActivity(new Intent(this, ExerciseActivity.class)));
+        findViewById(R.id.btn_profile).setOnClickListener(v -> startActivity(new Intent(this, ProfileActivity.class)));
+        findViewById(R.id.btn_settings).setOnClickListener(v -> startActivity(new Intent(this, SettingsActivity.class)));
 
-        profileBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(ProfileActivity.this, ProfileActivity.class);
-            startActivity(intent);
-        });
-        exerciseBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(ProfileActivity.this, ExerciseActivity.class);
-            startActivity(intent);
-        });
-        settingsBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(ProfileActivity.this, SettingsActivity.class);
-            startActivity(intent);
-        });
     }
-    public void goToHomeActivity(View view) {
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
-    }
+
 //---------------------------------------------------------------------------------------------------------------<
     // Handles the result of Picture Upload
     @Override
@@ -191,21 +195,9 @@ public class ProfileActivity extends AppCompatActivity {
                     .placeholder(R.drawable.profile_icon_picture)
                     .into(profilePicture);
 
-
-            // Store image URI in Room database
-            UserProfile profile = new UserProfile();
-            profile.id = 1; // Always 1 if you have only one user
-            profile.name = "Alex";
-            profile.photoUri = selectedImage.toString(); // From image picker
-
-            dao.insertProfile(profile);
-
-            UserProfile savedProfile = dao.getProfile();
-            if (savedProfile != null && savedProfile.photoUri != null) {
-                Uri savedUri = Uri.parse(savedProfile.photoUri);
-                profilePicture.setImageURI(savedUri);
-            }
-
+            // Save URI to existing user
+            currentUser.photoUri = selectedImage.toString();
+            executor.execute(() -> dao.update(currentUser));
         }
     }
 }

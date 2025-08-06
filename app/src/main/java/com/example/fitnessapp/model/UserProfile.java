@@ -9,4 +9,5 @@ public class UserProfile {
 
     public String name;
     public String photoUri;
+    public int caloriesLimit = 2000;
 }
