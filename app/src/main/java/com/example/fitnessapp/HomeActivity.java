@@ -39,7 +39,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private Button btnAddFood, updateButton;
     private boolean isEditTextVisible = false;
-    private int consumedCalories = 0;
+    private int consumedCalories;
     private int calFood = 0;
 
     @Override
@@ -85,6 +85,9 @@ public class HomeActivity extends AppCompatActivity {
             int currentUserId = currentUser.id;
             caloriesLimit = currentUser.caloriesLimit;
 
+            // Initialise our calories tracker class
+            CaloriesTracker newEntry = new CaloriesTracker();
+
             // Load consumed calories for this user
             List<CaloriesTracker> entries = daoCalories.getEntriesForUser(currentUserId);
             consumedCalories = 0;
@@ -92,7 +95,6 @@ public class HomeActivity extends AppCompatActivity {
                 consumedCalories += entry.calories;
             }
             percent = (float) consumedCalories / caloriesLimit;
-
             // Update UI on main thread
             runOnUiThread(() -> {
                 gaugeView.setPercent(percent);
@@ -105,11 +107,11 @@ public class HomeActivity extends AppCompatActivity {
                     if (!foodStr.isEmpty()) {
                         calFood = Integer.parseInt(foodStr);
 
-                        // Insert consumed calories to DataBase
-                        CaloriesTracker newEntry = new CaloriesTracker();
+
 
                         newEntry.calories = calFood;
                         consumedCalories += calFood;
+                        newEntry.consumedCalories = consumedCalories;
                         newEntry.date = new Date();
                         newEntry.userId = currentUserId;
                         executor.execute(() -> daoCalories.insert(newEntry));
