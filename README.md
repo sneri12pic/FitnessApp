@@ -17,9 +17,6 @@ This Fitness Application is inspired by the robust features and user-friendly de
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/7d5d796e-d204-4c04-980b-b9ef1df60b65" />
 
 
-
-
-
 *  **Workout Options:** Running/Jogging, Hiking, and Cycling.
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/5739a8d5-1271-4499-94e8-345d960c80dc" />
 
@@ -32,11 +29,17 @@ This Fitness Application is inspired by the robust features and user-friendly de
 
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/893be624-c7c0-4154-ab20-c845f5cc69a1" />
 
-**Cycling**
-* Coming Soon
+**Cycling -- Coming Soon**
 
 
 *  **Profile Tracking:** Track completed workouts and sort them by day.
+
+<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/fd0b41d4-e145-476c-9e7d-c0045f81b67b" />
+
+
+* **Settings**
+
+<img width="524" height="1032" alt="image" src="https://github.com/user-attachments/assets/b7b368c0-9c9c-44c4-bdb7-1de7d2b23766" />
 
 
 
