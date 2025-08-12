@@ -36,8 +36,9 @@ public class HomeActivity extends AppCompatActivity {
     private TextView statusText;
     private GaugeView gaugeView;
     private ImageView imgAddFood;
+    private ImageView imgResetCal;
 
-    private Button btnAddFood, updateButton;
+    private Button btnResetCal, btnAddFood, updateButton;
     private boolean isEditTextVisible = false;
     private int consumedCalories;
     private int calFood = 0;
@@ -63,6 +64,8 @@ public class HomeActivity extends AppCompatActivity {
         statusText = findViewById(R.id.statusText);
         gaugeView = findViewById(R.id.gaugeView);
         imgAddFood = findViewById(R.id.img_add_food);
+        imgResetCal = findViewById(R.id.img_pencil_edit);
+        btnResetCal = findViewById(R.id.btn_reset_cal);
         btnAddFood = findViewById(R.id.btnAddFood);
         updateButton = findViewById(R.id.btn_update);
 
@@ -73,6 +76,7 @@ public class HomeActivity extends AppCompatActivity {
             if (allUsers.isEmpty()) {
                 // Create default user
                 UserProfile newUser = new UserProfile();
+                newUser = new UserProfile();
                 newUser.name = "Alex";
                 newUser.caloriesLimit = 2000; // default limit
                 daoProfile.insertProfile(newUser);
@@ -85,20 +89,43 @@ public class HomeActivity extends AppCompatActivity {
             int currentUserId = currentUser.id;
             caloriesLimit = currentUser.caloriesLimit;
 
-            // Initialise our calories tracker class
+            // Initialise calories tracker class and UserProfile class
             CaloriesTracker newEntry = new CaloriesTracker();
 
-            // Load consumed calories for this user
+            // Get the last entry OF CaloriesTracker
             List<CaloriesTracker> entries = daoCalories.getEntriesForUser(currentUserId);
-            consumedCalories = 0;
-            for (CaloriesTracker entry : entries) {
-                consumedCalories += entry.calories;
+            if (!entries.isEmpty()) {
+                CaloriesTracker lastEntry = entries.get(entries.size() - 1);
+                consumedCalories = lastEntry.consumedCalories;
             }
-            percent = (float) consumedCalories / caloriesLimit;
+            else {consumedCalories = 0;}
+
+
             // Update UI on main thread
+            percent = (float) consumedCalories / caloriesLimit;
             runOnUiThread(() -> {
                 gaugeView.setPercent(percent);
                 statusText.setText("Calories: " + consumedCalories + " / " + caloriesLimit);
+
+                btnResetCal.setOnClickListener(v -> {
+                    caloriesLimit = 2000; // Default Limit
+                    currentUser.caloriesLimit = caloriesLimit;
+
+                    consumedCalories = 0;
+                    newEntry.consumedCalories = consumedCalories;
+
+                    newEntry.calories = 0;
+                    newEntry.date = new Date();
+                    newEntry.userId = currentUserId;
+
+                    executor.execute(() -> daoCalories.insert(newEntry));
+                    executor.execute(() -> daoProfile.update(currentUser));
+
+                    // Calories Tracker UI Update
+                    percent = (float) consumedCalories / caloriesLimit;
+                    gaugeView.setPercent(percent);
+                    statusText.setText("Calories: " + consumedCalories + " / " + caloriesLimit);
+                });
 
                 // Safe to use userProfile and daoProfile
                 btnAddFood.setOnClickListener(v -> {
@@ -107,8 +134,6 @@ public class HomeActivity extends AppCompatActivity {
                     if (!foodStr.isEmpty()) {
                         calFood = Integer.parseInt(foodStr);
 
-
-
                         newEntry.calories = calFood;
                         consumedCalories += calFood;
                         newEntry.consumedCalories = consumedCalories;
@@ -116,6 +141,7 @@ public class HomeActivity extends AppCompatActivity {
                         newEntry.userId = currentUserId;
                         executor.execute(() -> daoCalories.insert(newEntry));
 
+                        // Calories Tracker UI Update
                         inputCalories.setText("");
                         percent = (float) consumedCalories / caloriesLimit;
                         gaugeView.setPercent(percent);
@@ -142,9 +168,11 @@ public class HomeActivity extends AppCompatActivity {
                             executor.execute(() -> daoProfile.update(currentUser));
                             caloriesLimit = currentUser.caloriesLimit;
                         }
+                        // Calories Tracker UI Update
                         percent = (float) consumedCalories / caloriesLimit;
                         gaugeView.setPercent(percent);
                         statusText.setText("Calories: " + consumedCalories + " / " + caloriesLimit);
+
                         inputCalories.setVisibility(View.VISIBLE);
                         btnAddFood.setVisibility(View.VISIBLE);
                         imgAddFood.setVisibility(View.VISIBLE);

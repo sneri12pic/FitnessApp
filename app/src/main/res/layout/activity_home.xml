@@ -131,6 +131,20 @@
             android:layout_marginTop="180dp"
             android:src="@drawable/plusimage"
             android:visibility="invisible"/>
+        <Button
+            android:id="@+id/btn_reset_cal"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="230dp"
+            android:layout_marginLeft="295dp"
+            android:alpha="0"/>
+        <ImageView
+            android:id="@+id/img_pencil_edit"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/penciledit"
+            android:layout_marginTop="230dp"
+            android:layout_marginLeft="295dp"/>
         <com.example.fitnessapp.StrokeTextView
             android:id="@+id/statusText"
             android:layout_width="wrap_content"
