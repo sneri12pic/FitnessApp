@@ -117,12 +117,9 @@ This design allows each user to have a persistent profile and maintain daily cal
 
 ## Improvements Planned
 
-* Improved layout margins for various devices.
 * More workout options.
 * Location-based workout suggestions.
 * Daily sort and filter in Profile.
-* Profile icon customization.
-* Working Calories Tracker
 
 ---
 
