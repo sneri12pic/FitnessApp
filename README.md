@@ -26,11 +26,20 @@ This Fitness Application is inspired by the robust features and user-friendly de
  **Running Or Jogging**
  
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/05fc2de5-c433-495a-a9cb-379d15c54c39" />
-<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/2ee1489c-dcea-408c-a98d-dae5d34e4dee" />
-<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/b79de980-ed2d-41c0-8348-4e54fa96751f" />
+
+
+**Hiking**
+
+<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/893be624-c7c0-4154-ab20-c845f5cc69a1" />
+
+**Cycling**
+* Coming Soon
 
 
 *  **Profile Tracking:** Track completed workouts and sort them by day.
+
+
+
 *  **Check Buttons:** Mark workouts as done — totals are updated in the Profile.
 *  **Calm UI:** Creamy pink colors and soft gradients for eye comfort.
 *  **Easy Navigation:** Bottom panel for quick activity switching.
