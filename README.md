@@ -39,7 +39,7 @@ This Fitness Application is inspired by the robust features and user-friendly de
 
 * **Settings**
 
-<img width="524" height="1032" alt="image" src="https://github.com/user-attachments/assets/b7b368c0-9c9c-44c4-bdb7-1de7d2b23766" />
+<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/b7b368c0-9c9c-44c4-bdb7-1de7d2b23766" />
 
 
 
