@@ -103,15 +103,15 @@ This design allows each user to have a persistent profile and maintain daily cal
 
 ## Installation
 
-1. **Clone the repo:**
-
-   ```bash
-   https://github.com/sneri12pic/FitnessApp.git
-   ```
-
-2. **Open in Android Studio** (or your preferred IDE).
-
-3. **Build & Run.**
+### Prerequisites
+- Android Studio 4.0 or higher
+- Android SDK 21 or above
+- Gradle 7.0+
+### Steps
+1. Clone the repo: `git clone https://github.com/sneri12pic/FitnessApp.git`
+2. Open in Android Studio.
+3. Sync Gradle and build the project.
+4. Run on an emulator or physical device (API 21+).
 
 ---
 
