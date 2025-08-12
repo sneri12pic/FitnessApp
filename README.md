@@ -48,6 +48,9 @@ This Fitness Application is inspired by the robust features and user-friendly de
 *  **Easy Navigation:** Bottom panel for quick activity switching.
 *  **Location-based Workouts:** (Planned) Customize hiking and cycling options based on user’s location.
 *  **Customizable Profile:** Users can edit details and change profile icons.
+*  **Persistent User Profile:** Name, calorie limit, and profile image URI are stored in a local Room database.
+*  **Daily Calories Tracker:** Stores calories goal, consumed calories, date, and associated user ID — ensuring daily progress is saved and restored even after app restarts.
+
 
 ---
 
@@ -63,6 +66,25 @@ The app consists of **8 classes** and corresponding XML layouts:
 6. **RunningJoggingActivity** — Running/Jogging workouts.
 7. **HikingActivity** — Hiking workouts.
 8. **CyclingActivity** — Cycling workouts *(Design ready, implementation in progress).*
+
+### Database Structure
+
+The application uses **Room** for local persistence, with two main tables:
+
+1. **UserProfile**  
+   - `id` (Primary Key)  
+   - `name` (String)  
+   - `caloriesLimit` (Integer)  
+   - `photoUri` (String — URI to profile image)  
+
+2. **CaloriesTracker**  
+   - `id` (Primary Key)  
+   - `userId` (Foreign Key → UserProfile.id)  
+   - `calories` (Integer)  
+   - `consumedCalories` (Integer)  
+   - `date` (String — in `yyyy-MM-dd` format)  
+
+This design allows each user to have a persistent profile and maintain daily calorie logs.
 
 ---
 
