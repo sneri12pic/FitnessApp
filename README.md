@@ -11,8 +11,8 @@ This Fitness Application is inspired by the robust features and user-friendly de
 
 *  **Calorie Counter:** Editable and updatable via the Home screen. With progress shown in arch.
 <img width="455" height="907" alt="image" src="https://github.com/user-attachments/assets/4773a1ac-feaf-40bb-9fc4-9dd64e56ccfb" />
-<img width="451" height="889" alt="image" src="https://github.com/user-attachments/assets/fd30827f-29c7-4a75-a4c3-58d6f204f34b" />
-<img width="492" height="892" alt="image" src="https://github.com/user-attachments/assets/b07fb0cd-dc35-499b-a7b7-ba4da3b6c0fd" />
+<img width="455" height="907" alt="image" src="https://github.com/user-attachments/assets/fd30827f-29c7-4a75-a4c3-58d6f204f34b" />
+<img width="455" height="907" alt="image" src="https://github.com/user-attachments/assets/b07fb0cd-dc35-499b-a7b7-ba4da3b6c0fd" />
 
 
 *  **Workout Options:** Running/Jogging, Hiking, and Cycling.
