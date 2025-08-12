@@ -1,45 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#DDB0DB"
+    android:background="#F5DBCB"
     tools:context=".MainActivity">
 
-
-    <ImageView
-        android:id="@+id/greeting_main"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/hello" />
-
-
+        <RelativeLayout
+            android:id="@+id/container_hello_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp">
+            <com.example.fitnessapp.StrokeTextView
+                android:id="@+id/statusText"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:text="Hello!"
+                android:textSize="40sp"
+                android:layout_marginLeft="200dp"
+                android:layout_marginTop="45dp" />
+            <ImageView
+                android:id="@+id/greeting_main"
+                android:layout_width="200dp"
+                android:layout_height="140dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="150dp"
+                android:src="@drawable/hellomsg" />
+        </RelativeLayout>
     <ImageView
         android:id="@+id/greetingHuman_main"
         android:layout_width="match_parent"
         android:layout_height="350dp"
-        android:layout_marginTop="0dp"
-        android:src="@drawable/human" />
-
+        android:layout_marginTop="210dp"
+        android:src="@drawable/human4" />
+    <ImageView
+        android:id="@+id/ball"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="610dp"
+        android:src="@drawable/ballwitharrow"/>
     <Button
         android:id="@+id/start_button"
-        android:layout_width="111dp"
-
-        android:layout_height="85dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/oval_background"
-
-        android:text="Start"
-        android:textColor="@color/white"
-        android:visibility="visible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="610dp"
+        android:alpha="0"
         android:onClick="goToSecondActivity"/>
-
-
-</LinearLayout>
+</RelativeLayout>
