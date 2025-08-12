@@ -24,6 +24,7 @@ This Fitness Application is inspired by the robust features and user-friendly de
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/5739a8d5-1271-4499-94e8-345d960c80dc" />
 
  **Running Or Jogging**
+ 
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/05fc2de5-c433-495a-a9cb-379d15c54c39" />
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/2ee1489c-dcea-408c-a98d-dae5d34e4dee" />
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/b79de980-ed2d-41c0-8348-4e54fa96751f" />
