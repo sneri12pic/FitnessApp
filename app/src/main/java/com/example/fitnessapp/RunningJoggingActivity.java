@@ -16,29 +16,15 @@ public class RunningJoggingActivity extends AppCompatActivity {
         return (int) (dp * density + 0.5f);
     }
 
-    // Bottom Panel Buttons--------------------------------
-    private Button profile;
-    private Button home;
-    private Button exercise;
-    private Button settings;
-
-    // Running Details--------------------------------
-    private Button runningButton;
     private ImageView runningDetailsImageOpen;
     private ImageView runningDetailsImageClosed;
     private ImageView runningDetailsText;
     private RelativeLayout runningDetailsContainer;
 
-    // Jogging Details--------------------------------
-    private Button joggingButton;
     private ImageView joggingDetailsImageOpen;
     private ImageView joggingDetailsImageClosed;
     private ImageView joggingDetailsText;
     private RelativeLayout joggingDetailsContainer;
-    private TextView joggingDetailsTitle;
-
-    // Initial top margin for jogging details container
-    private final int INITIAL_JOGGING_MARGIN_TOP = 310;
     private boolean isRunningActivityOpen = false;
     private boolean isJoggingActivityOpen = false;
 
@@ -47,24 +33,28 @@ public class RunningJoggingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_running_jogging);
 
-        // Bottom Panel Buttons-------------------
-        home = findViewById(R.id.btn_home);
-        profile = findViewById(R.id.btn_profile);
-        exercise = findViewById(R.id.btn_exercise);
-        settings = findViewById(R.id.btn_settings);
-        // Running--------------------------------
-        runningButton = findViewById(R.id.running_button);
+
+        // Running Details--------------------------------
+        Button runningButton = findViewById(R.id.running_button);
         runningDetailsImageOpen = findViewById(R.id.running_details_image_opened);
         runningDetailsImageClosed = findViewById(R.id.running_details_image_closed);
         runningDetailsText = findViewById(R.id.running_details_text);
         runningDetailsContainer = findViewById(R.id.running_details_container);
-        // Jogging--------------------------------
-        joggingButton = findViewById(R.id.jogging_button);
+
+        // Jogging Details--------------------------------
+        Button joggingButton = findViewById(R.id.jogging_button);
         joggingDetailsImageOpen = findViewById(R.id.jogging_details_image_opened);
         joggingDetailsImageClosed = findViewById(R.id.jogging_details_image_closed);
         joggingDetailsText = findViewById(R.id.jogging_details_text);
         joggingDetailsContainer = findViewById(R.id.jogging_details_container);
-        joggingDetailsTitle = findViewById(R.id.jogging_title);
+        TextView joggingDetailsTitle = findViewById(R.id.jogging_title);
+
+        // Bottom Panel Details--------------------------------
+        Button home = findViewById(R.id.btn_home);
+        Button profile = findViewById(R.id.btn_profile);
+        Button exercise = findViewById(R.id.btn_exercise);
+        Button settings = findViewById(R.id.btn_settings);
+
         // Bottom Panel Buttons-------------------
         home.setOnClickListener(v -> {
             Intent intent = new Intent(RunningJoggingActivity.this, HomeActivity.class);
@@ -94,8 +84,6 @@ public class RunningJoggingActivity extends AppCompatActivity {
                 if (runningDetailsContainer.getVisibility() == View.VISIBLE) {
                     // Running activity is closed
                     isRunningActivityOpen = false;
-                    // Adjust margin for jogging button
-                    adjustJoggingButtonMargin(INITIAL_JOGGING_MARGIN_TOP);
                     // If running details are visible, hide them
                     runningDetailsContainer.setVisibility(View.INVISIBLE);
                     runningDetailsImageOpen.setVisibility(View.INVISIBLE);
@@ -145,60 +133,5 @@ public class RunningJoggingActivity extends AppCompatActivity {
                 joggingDetailsText.setVisibility(View.INVISIBLE);
             }
         });
-    }
-
-
-    /*
-
-    public void toggleJoggingDetails() {
-        // Toggle visibility of jogging details
-        if (joggingDetailsContainer.getVisibility() == View.VISIBLE) {
-            joggingDetailsContainer.setVisibility(View.INVISIBLE);
-            joggingDetailsImageOpen.setVisibility(View.INVISIBLE);
-            joggingDetailsImageClosed.setVisibility(View.VISIBLE);
-        } else {
-            // If jogging details are not visible, show them
-            joggingDetailsContainer.setVisibility(View.VISIBLE);
-            joggingDetailsImageOpen.setVisibility(View.VISIBLE);
-            joggingDetailsImageClosed.setVisibility(View.INVISIBLE);
-            if(isRunningActivityOpen){
-                // Adjust margins for Water details
-                adjustJoggingButtonMargin(runningDetailsContainer.getHeight()+50);
-
-            }
-            else{
-                adjustJoggingButtonMargin(INITIAL_JOGGING_MARGIN_TOP);
-            }
-        }
-    }
-    */
-
-
-    //Adjustment For The Jogging Tab
-    private void adjustJoggingButtonMargin(int marginTop) {
-        /*
-
-        // Adjust the margins for all elements within the jogging details container
-
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) joggingDetailsContainer.getLayoutParams();
-        layoutParams.setMargins(0, marginTop + 550, 0, 0);
-        joggingDetailsContainer.setLayoutParams(layoutParams);
-
-        // Adjust the margins for all elements within the jogging details joggingDetailsImageClosed
-        RelativeLayout.LayoutParams imageClosedLayoutParams = (RelativeLayout.LayoutParams) joggingDetailsImageClosed.getLayoutParams();
-        imageClosedLayoutParams.setMargins(0, marginTop - 31, 0, 0);
-        joggingDetailsImageClosed.setLayoutParams(imageClosedLayoutParams);
-
-        // Adjust the margins for the jogging title
-        RelativeLayout.LayoutParams titleLayoutParams = (RelativeLayout.LayoutParams) joggingDetailsTitle.getLayoutParams();
-        titleLayoutParams.setMargins(45, marginTop, 0, 0);
-        joggingDetailsTitle.setLayoutParams(titleLayoutParams);
-
-        // Adjust the margins for the jogging buttons (if needed)
-        RelativeLayout.LayoutParams button1LayoutParams = (RelativeLayout.LayoutParams) joggingButton.getLayoutParams();
-        button1LayoutParams.setMargins(0, marginTop, 0, 0);
-        joggingButton.setLayoutParams(button1LayoutParams);
-
-        */
     }
 }
