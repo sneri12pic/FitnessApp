@@ -1,8 +1,7 @@
 ## README.md — *Fitness Application*
 
-!!!OLD VERSION!!!
 
-# 🏃‍♂️ Fitness Tracker — Inspired by Google Fit
+# 🏃‍♂️ Fitness Tracker — Inspired by Google Fit and MacroFactor
 
 This Fitness Application is inspired by the robust features and user-friendly design of **Google Fit**, offering an engaging and comfortable experience to help users track workouts and stay healthy.
 
@@ -10,7 +9,12 @@ This Fitness Application is inspired by the robust features and user-friendly de
 
 ## Key Features
 
-*  **Calorie Counter:** Editable and updatable via the Home screen.
+*  **Calorie Counter:** Editable and updatable via the Home screen. With progress shown in arch.
+<img width="455" height="907" alt="image" src="https://github.com/user-attachments/assets/4773a1ac-feaf-40bb-9fc4-9dd64e56ccfb" />
+<img width="451" height="889" alt="image" src="https://github.com/user-attachments/assets/fd30827f-29c7-4a75-a4c3-58d6f204f34b" />
+<img width="492" height="892" alt="image" src="https://github.com/user-attachments/assets/b07fb0cd-dc35-499b-a7b7-ba4da3b6c0fd" />
+
+
 *  **Workout Options:** Running/Jogging, Hiking, and Cycling.
 *  **Profile Tracking:** Track completed workouts and sort them by day.
 *  **Check Buttons:** Mark workouts as done — totals are updated in the Profile.
@@ -28,7 +32,7 @@ The app consists of **8 classes** and corresponding XML layouts:
 1. **MainActivity** — Welcome screen. (`activity_main.xml`)
 2. **HomeActivity** — Home screen with calorie counter. (`activity_home.xml`)
 3. **ExerciseActivity** — Choose workouts. (`activity_exercise.xml`)
-4. **ProfileActivity** — View and sort workout history. (`activity_profile.xml`)
+4. **ProfileActivity** — View and sort workout history and profile settings. (`activity_profile.xml`)
 5. **SettingsActivity** — Manage personal details. (`activity_settings.xml`)
 6. **RunningJoggingActivity** — Running/Jogging workouts.
 7. **HikingActivity** — Hiking workouts.
@@ -59,9 +63,7 @@ The app consists of **8 classes** and corresponding XML layouts:
 
 2. **Open in Android Studio** (or your preferred IDE).
 
-3. **Connect your device** (Pixel 4a recommended).
-
-4. **Build & Run.**
+3. **Build & Run.**
 
 ---
 
