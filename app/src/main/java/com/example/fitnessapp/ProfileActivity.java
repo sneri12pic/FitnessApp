@@ -1,5 +1,7 @@
 package com.example.fitnessapp;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 import com.bumptech.glide.Glide;
@@ -35,10 +37,22 @@ public class ProfileActivity extends AppCompatActivity {
     private final Executor executor = Executors.newSingleThreadExecutor();
 
     // Func to convert values dp to px
-    private int dpToPx(int dp) {
+/*    private int dpToPx(float dp) {
         float density = getResources().getDisplayMetrics().density;
         return (int) (dp * density + 0.5f);
-    }
+    }*/
+
+    // For Automatic set of week day
+    private final int[] panelLeftMargins = {
+            R.dimen.panel_sunday_left,
+            R.dimen.panel_monday_left,
+            R.dimen.panel_tuesday_left,
+            R.dimen.panel_wednesday_left,
+            R.dimen.panel_thursday_left,
+            R.dimen.panel_friday_left,
+            R.dimen.panel_saturday_left
+    };
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -103,73 +117,25 @@ public class ProfileActivity extends AppCompatActivity {
             return false;
         });
 
-        profilePic.setOnClickListener(v -> {
-           Intent intent = new Intent(Intent.ACTION_PICK);
-           intent.setType("image/*");
-           startActivityForResult(intent, 1);
-       });
+        profilePic.setOnClickListener(v -> pickImageLauncher.launch("image/*"));
         
         // Get the current LayoutParams
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) panelImage.getLayoutParams();
 
         // Get the day of the week to put correct menu tab of the exercise box
-        Calendar calendar = Calendar.getInstance();
-        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK); //day order: 1 = Sunday, 2 = Monday, ..., 7 = Saturday
+        int dayIndex = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1;
+        setPanelPosition(panelImage,
+                getResources().getDimension(panelLeftMargins[dayIndex]),
+                getResources().getDimension(R.dimen.panel_dayOfWeek_top));
 
-        //MarginLeft step is 37.2 which is rounded
-        switch(dayOfWeek){
-            case Calendar.SUNDAY:
-                params.setMargins(dpToPx(295), dpToPx(452), 0, 0);
-                break;
-            case Calendar.MONDAY:
-                params.setMargins(dpToPx(72), dpToPx(452), 0, 0);
-                break;
-            case Calendar.TUESDAY:
-                params.setMargins(dpToPx(111), dpToPx(452), 0, 0);
-                break;
-            case Calendar.WEDNESDAY:
-                params.setMargins(dpToPx(146), dpToPx(452), 0, 0);
-                break;
-            case Calendar.THURSDAY:
-                params.setMargins(dpToPx(183), dpToPx(452), 0, 0);
-                break;
-            case Calendar.FRIDAY:
-                params.setMargins(dpToPx(220), dpToPx(452), 0, 0);
-                break;
-            case Calendar.SATURDAY:
-                params.setMargins(dpToPx(258), dpToPx(452), 0, 0);
-                break;
-        }
 //---------------------------------------------------------------------------------------------------------------Buttons Week Days
-        btn_panelMonday.setOnClickListener(v -> {
-            params.setMargins(dpToPx(72), dpToPx(452), 0, 0);
-            panelImage.setLayoutParams(params);
-        });
-        btn_panelTuesday.setOnClickListener(v -> {
-            params.setMargins(dpToPx(111), dpToPx(452), 0, 0);
-            panelImage.setLayoutParams(params);
-        });
-        btn_panelWednesday.setOnClickListener(v -> {
-            params.setMargins(dpToPx(146), dpToPx(452), 0, 0);
-            panelImage.setLayoutParams(params);
-        });
-        btn_panelThursday.setOnClickListener(v -> {
-            params.setMargins(dpToPx(183), dpToPx(452), 0, 0);
-            panelImage.setLayoutParams(params);
-        });
-        btn_panelFriday.setOnClickListener(v -> {
-            params.setMargins(dpToPx(220), dpToPx(452), 0, 0);
-            panelImage.setLayoutParams(params);
-        });
-        btn_panelSaturday.setOnClickListener(v -> {
-            params.setMargins(dpToPx(258), dpToPx(452), 0, 0);
-            panelImage.setLayoutParams(params);
-        });
-        btn_panelSunday.setOnClickListener(v -> {
-            params.setMargins(dpToPx(295), dpToPx(452), 0, 0);
-            panelImage.setLayoutParams(params);
-        });
-
+        btn_panelMonday.setOnClickListener(v -> setPanelPosition(panelImage, getResources().getDimension(R.dimen.panel_monday_left), getResources().getDimension(R.dimen.panel_dayOfWeek_top)));
+        btn_panelTuesday.setOnClickListener(v -> setPanelPosition(panelImage, getResources().getDimension(R.dimen.panel_tuesday_left), getResources().getDimension(R.dimen.panel_dayOfWeek_top)));
+        btn_panelWednesday.setOnClickListener(v -> setPanelPosition(panelImage, getResources().getDimension(R.dimen.panel_wednesday_left), getResources().getDimension(R.dimen.panel_dayOfWeek_top)));
+        btn_panelThursday.setOnClickListener(v -> setPanelPosition(panelImage, getResources().getDimension(R.dimen.panel_thursday_left), getResources().getDimension(R.dimen.panel_dayOfWeek_top)));
+        btn_panelFriday.setOnClickListener(v -> setPanelPosition(panelImage, getResources().getDimension(R.dimen.panel_friday_left), getResources().getDimension(R.dimen.panel_dayOfWeek_top)));
+        btn_panelSaturday.setOnClickListener(v -> setPanelPosition(panelImage, getResources().getDimension(R.dimen.panel_saturday_left), getResources().getDimension(R.dimen.panel_dayOfWeek_top)));
+        btn_panelSunday.setOnClickListener(v -> setPanelPosition(panelImage, getResources().getDimension(R.dimen.panel_sunday_left), getResources().getDimension(R.dimen.panel_dayOfWeek_top)));
 //---------------------------------------------------------------------------------------------------------------<
 
 //---------------------------------------------------------------------------------------------------------------Buttons Bottom Panel
@@ -178,26 +144,29 @@ public class ProfileActivity extends AppCompatActivity {
         findViewById(R.id.btn_exercise).setOnClickListener(v -> startActivity(new Intent(this, ExerciseActivity.class)));
         findViewById(R.id.btn_profile).setOnClickListener(v -> startActivity(new Intent(this, ProfileActivity.class)));
         findViewById(R.id.btn_settings).setOnClickListener(v -> startActivity(new Intent(this, SettingsActivity.class)));
-
     }
-
 //---------------------------------------------------------------------------------------------------------------<
     // Handles the result of Picture Upload
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
-            Uri selectedImage = data.getData();
-            ImageView profilePicture = findViewById(R.id.img_profilePic);
-            Glide.with(this)
-                    .load(selectedImage)
-                    .transform(new CircleCrop())
-                    .placeholder(R.drawable.profile_icon_picture)
-                    .into(profilePicture);
+    private final ActivityResultLauncher<String> pickImageLauncher =
+        registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+            if (uri != null) {
+                ImageView profilePicture = findViewById(R.id.img_profilePic);
+                Glide.with(this)
+                        .load(uri)
+                        .transform(new CircleCrop())
+                        .placeholder(R.drawable.profile_icon_picture)
+                        .into(profilePicture);
+                // Save URI to existing user
+                currentUser.photoUri = uri.toString();
+                executor.execute(() -> dao.update(currentUser));
+            }
+        });
 
-            // Save URI to existing user
-            currentUser.photoUri = selectedImage.toString();
-            executor.execute(() -> dao.update(currentUser));
-        }
+    // Helper for set panel position
+    private void setPanelPosition(View panelImage, float leftDp, float topDp) {
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) panelImage.getLayoutParams();
+        params.setMargins((int) leftDp, (int) topDp, 0, 0);
+        panelImage.setLayoutParams(params);
     }
+
 }
