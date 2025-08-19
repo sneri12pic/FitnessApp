@@ -1,4 +1,4 @@
-package com.example.fitnessapp;
+package com.example.fitnessapp.workouts;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +8,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.fitnessapp.ExerciseActivity;
+import com.example.fitnessapp.HomeActivity;
+import com.example.fitnessapp.ProfileActivity;
+import com.example.fitnessapp.R;
+import com.example.fitnessapp.SettingsActivity;
+
 public class HikingActivity extends AppCompatActivity {
     // Bottom Panel Buttons----------------------
     private Button profile;
@@ -48,6 +55,7 @@ public class HikingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hiking);
+
         //Bottom panel ids
         home = findViewById(R.id.btn_home);
         profile = findViewById(R.id.btn_profile);

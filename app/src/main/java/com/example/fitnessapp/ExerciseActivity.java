@@ -2,10 +2,13 @@ package com.example.fitnessapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.fitnessapp.workouts.GymActivity;
+import com.example.fitnessapp.workouts.HikingActivity;
+import com.example.fitnessapp.workouts.RunningJoggingActivity;
 
 public class ExerciseActivity extends AppCompatActivity {
     @Override
@@ -54,7 +57,7 @@ public class ExerciseActivity extends AppCompatActivity {
             startActivity(intent);
         });
         btn_gym.setOnClickListener(v -> {
-            Intent intent = new Intent(ExerciseActivity.this, RunningJoggingActivity.class);
+            Intent intent = new Intent(ExerciseActivity.this, GymActivity.class);
             startActivity(intent);
         });
     }
