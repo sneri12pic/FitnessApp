@@ -9,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -28,6 +29,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
@@ -49,14 +51,75 @@ class GymActivity : ComponentActivity() {
 @Preview
 fun GymApp() {
     val context = LocalContext.current
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.background),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxSize(),
+            contentScale = ContentScale.Crop // scales and crops to fill the container
+        )
+        Box(
+            modifier = Modifier.fillMaxWidth()
+                .wrapContentHeight(),
+            contentAlignment = Alignment.Center
+        ){
+            Image(
+                painter = painterResource(id = R.drawable.timercircleset),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(top = 150.dp)
+                    .size(250.dp), // shortcut for width & height
+            )
+        }
 
-    Image(
-        painter = painterResource(id = R.drawable.background),
-        contentDescription = null,
-        modifier = Modifier
-            .fillMaxSize(),
-        contentScale = ContentScale.Crop // scales and crops to fill the container
-    )
+        Column(
+            modifier = Modifier
+                .align(Alignment.Center) // or BottomCenter if you want it at bottom
+                .padding(top = 350.dp)   // adjust position relative to circle
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ){
+            Image(
+                painter = painterResource(id = R.drawable.set_time_body),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(top = 0.dp)
+                    .height(50.dp)
+                    .width(300.dp)
+            )
+            Spacer(modifier = Modifier.height(15.dp))
+            Image(
+                painter = painterResource(id = R.drawable.set_time_body),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(top = 0.dp)
+                    .height(50.dp)
+                    .width(300.dp)
+            )
+            Spacer(modifier = Modifier.height(15.dp))
+            Image(
+                painter = painterResource(id = R.drawable.set_time_body),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(top = 0.dp)
+                    .height(50.dp)
+                    .width(300.dp)
+            )
+        }
+    }
+
+    Box(
+        modifier = Modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center // centers children by default
+    ){
+
+
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
