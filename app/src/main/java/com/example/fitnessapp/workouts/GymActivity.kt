@@ -1,5 +1,6 @@
 package com.example.fitnessapp.workouts
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Window
@@ -53,6 +54,7 @@ import com.example.fitnessapp.HomeActivity
 import com.example.fitnessapp.ProfileActivity
 import com.example.fitnessapp.R
 import com.example.fitnessapp.SettingsActivity
+import com.example.fitnessapp.util.SoundPlayer
 
 class GymActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,7 +107,7 @@ fun GymApp() {
                         .size(250.dp), // shortcut for width & height
                 )
                 Button(
-                    onClick = {stopWatch.start()},
+                    onClick = {stopWatch.start(); SoundPlayer.playPop(context)},
                     modifier = Modifier
                         .align(Alignment.Center)
                         .size(250.dp)
