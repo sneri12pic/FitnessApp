@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 class StopWatch {
-    var formattedTime by mutableStateOf("00:00")
+    var formattedTime by mutableStateOf("00:00:00")
 
     private var coroutineScope = CoroutineScope(Dispatchers.Main)
     private var isActive = false
@@ -31,6 +31,8 @@ class StopWatch {
         lastTimeStamp = System.currentTimeMillis()
         isActive = true
         job = CoroutineScope(Dispatchers.Main).launch {
+            formattedTime = formatTime(timeMillis)
+
             lastTimeStamp = System.currentTimeMillis()
             this@StopWatch.isActive = true
             while(isActive){
@@ -56,14 +58,16 @@ class StopWatch {
         job?.cancel()
         timeMillis = 0L
         lastTimeStamp = 0L
-        formattedTime = "00:00"
+        formattedTime = "00:00:00"
         isActive = false
     }
 
     private fun formatTime(timeMillis: Long) : String{
         val minutes = (timeMillis / 1000) / 60
         val seconds = (timeMillis / 1000) % 60
-        return String.format("%02d:%02d", minutes, seconds)
+        val millis = (timeMillis % 1000) / 10
+        return String.format("%02d:%02d:%02d", minutes, seconds, millis)
+
     }
 
 }

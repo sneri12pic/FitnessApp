@@ -2,10 +2,12 @@ package com.example.fitnessapp.workouts
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.content.MediaType.Companion.Text
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +27,10 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentDataType
@@ -37,6 +42,7 @@ import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.SemanticsProperties.Text
@@ -56,7 +62,13 @@ import com.example.fitnessapp.R
 import com.example.fitnessapp.SettingsActivity
 import com.example.fitnessapp.util.SoundPlayer
 
+import coil.compose.rememberAsyncImagePainter
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
+import coil.request.ImageRequest
+
 class GymActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -64,11 +76,12 @@ class GymActivity : ComponentActivity() {
         }
     }
 }
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 @Preview
 fun GymApp() {
     val context = LocalContext.current
-    val formattedTime = "00:00" // replace later with real state
+    val formattedTime = "00:00:00" // replace later with real state
     // Column for stopwatch + set time inputs
     val stopWatch = remember { StopWatch() }
     // Background Image --------------------------------------------------------------------
@@ -85,6 +98,9 @@ fun GymApp() {
     }
 
     // StopWatch Container -----------------------------------------------------------------
+    var started by remember { mutableStateOf(false) }
+    var startedGif by remember { mutableStateOf(false) }
+    var startedStopWatch_btns by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -95,60 +111,99 @@ fun GymApp() {
         ) {
             Box(
                 modifier = Modifier
-                    .padding(top = 100.dp)
+                    .padding(top = 90.dp)
                     .fillMaxWidth()
                     .wrapContentHeight(),
-            ){
+            ) {
                 Image(
                     painter = painterResource(id = R.drawable.timercircleset),
                     contentDescription = null,
                     modifier = Modifier
+                        .padding(top = 15.dp)
                         .align(Alignment.Center)
                         .size(250.dp), // shortcut for width & height
                 )
                 Button(
-                    onClick = {stopWatch.start(); SoundPlayer.playPop(context)},
+                    onClick = {
+                        stopWatch.start()
+                        SoundPlayer.playPop(context)
+                        // show the Row after this
+                        started = true
+                        startedGif = true
+                        startedStopWatch_btns = true
+                    },
                     modifier = Modifier
                         .align(Alignment.Center)
                         .size(250.dp)
                         .alpha(0F),
                 ) { }
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.Center),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(
-                        text = stopWatch.formattedTime,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 40.sp,
-                        color = Color(0xFF4F2912)
-                    )
-                }
             }
         }
-        Spacer(Modifier.height(30.dp))
-        Box(){
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight(),
+    ) {
+        Image(
+            painter = rememberAsyncImagePainter(
+                ImageRequest.Builder(context)
+                    .data(R.drawable.speed) // or URL
+                    .apply {
+                        // ensure GIF decoding
+                        decoderFactory(
+                            ImageDecoderDecoder.Factory()
+                        )
+                    }
+                    .build()
+            ),
+            modifier = Modifier
+                .align(Alignment.Center)
+                .size(450.dp) // shortcut for width & height
+                .alpha(if(started && startedGif)1f else 0f),
+            contentDescription = "CirclePulseGIF"
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = stopWatch.formattedTime,
+                fontWeight = FontWeight.Bold,
+                fontSize = 40.sp,
+                color = Color(0xFF4F2912)
+            )
+        }
+    }
+    Column(
+        modifier = Modifier.fillMaxWidth()
+            .padding(top = 370.dp)
+    ){
+        Box() {
             Row(
                 modifier = Modifier
                     .wrapContentHeight()
                     .fillMaxWidth(),
                 Arrangement.Center
-            ){
+            ) {
                 Image(
                     painter = painterResource(id = R.drawable.stopwatch_pause),
                     contentDescription = null,
                     modifier = Modifier
+                        .alpha(if(startedStopWatch_btns)1f else 0f)
                         .size(50.dp), // shortcut for width & height
                 )
                 Image(
                     painter = painterResource(id = R.drawable.stopwatch_stop),
                     contentDescription = null,
                     modifier = Modifier
+                        .alpha(if(startedStopWatch_btns)1f else 0f)
                         .size(50.dp), // shortcut for width & height
                 )
             }
+            // Show Row only if stopwatch started
             Row(
                 modifier = Modifier
                     .wrapContentHeight()
@@ -156,13 +211,13 @@ fun GymApp() {
                 Arrangement.Center
             ) {
                 Button(
-                    onClick = {stopWatch.pause()},
+                    onClick = { stopWatch.pause(); startedGif = false },
                     modifier = Modifier
                         .size(50.dp)
                         .alpha(0F),
                 ) { }
                 Button(
-                    onClick = {stopWatch.reset()},
+                    onClick = { stopWatch.reset(); startedGif = false; startedStopWatch_btns = false },
                     modifier = Modifier
                         .size(50.dp)
                         .alpha(0F),
