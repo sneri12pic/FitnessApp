@@ -8,7 +8,15 @@ import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.content.MediaType.Companion.Text
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,9 +32,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +47,7 @@ import androidx.compose.ui.autofill.ContentDataType
 import androidx.compose.ui.autofill.ContentDataType.Companion.Text
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
 import androidx.compose.ui.layout.ContentScale
@@ -66,6 +77,8 @@ import coil.compose.rememberAsyncImagePainter
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
+import kotlinx.coroutines.delay
+import org.intellij.lang.annotations.JdkConstants
 
 class GymActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.P)
@@ -126,7 +139,9 @@ fun GymApp() {
                 Button(
                     onClick = {
                         stopWatch.start()
-                        SoundPlayer.playPop(context)
+                        if (!started && !startedGif) {
+                            SoundPlayer.playPop(context)
+                        }
                         // show the Row after this
                         started = true
                         startedGif = true
@@ -142,27 +157,50 @@ fun GymApp() {
     }
     Box(
         modifier = Modifier
+            .padding(top = 126.dp)
             .fillMaxWidth()
             .wrapContentHeight(),
     ) {
-        Image(
-            painter = rememberAsyncImagePainter(
-                ImageRequest.Builder(context)
-                    .data(R.drawable.speed) // or URL
-                    .apply {
-                        // ensure GIF decoding
-                        decoderFactory(
-                            ImageDecoderDecoder.Factory()
-                        )
-                    }
-                    .build()
-            ),
-            modifier = Modifier
-                .align(Alignment.Center)
-                .size(450.dp) // shortcut for width & height
-                .alpha(if(started && startedGif)1f else 0f),
-            contentDescription = "CirclePulseGIF"
+        // Infinite transition keeps running
+        val infiniteTransition = rememberInfiniteTransition()
+
+        // Animate radius value
+        val radius by infiniteTransition.animateFloat(
+            initialValue = 290f,
+            targetValue = 150f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(durationMillis = 1000, easing = LinearEasing),
+                repeatMode = RepeatMode.Reverse
+            )
         )
+        // Play sound once per second when conditions are true
+        LaunchedEffect(started, startedGif) {
+            if (started && startedGif) {
+                while (true) {
+                    SoundPlayer.playPop(context) // play your pop sound
+                    delay(1000) // wait 1 second before next sound
+                }
+            }
+        }
+        Box(
+            modifier = Modifier
+                .wrapContentHeight()
+                .align(Alignment.Center),
+        ){
+            Canvas(
+                modifier = Modifier
+                    .size(200.dp)
+                    .alpha(if(started && startedGif)1f else 0f),
+            ) {
+                drawCircle(
+                    brush = Brush.verticalGradient(   // gradient fill
+                        colors = listOf(Color.Cyan, Color.Blue)
+                    ),
+                    radius = radius,
+                    center = center
+                )
+            }
+        }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -180,7 +218,7 @@ fun GymApp() {
     Column(
         modifier = Modifier.fillMaxWidth()
             .padding(top = 370.dp)
-    ){
+    ) {
         Box() {
             Row(
                 modifier = Modifier
@@ -192,14 +230,14 @@ fun GymApp() {
                     painter = painterResource(id = R.drawable.stopwatch_pause),
                     contentDescription = null,
                     modifier = Modifier
-                        .alpha(if(startedStopWatch_btns)1f else 0f)
+                        .alpha(if (startedStopWatch_btns) 1f else 0f)
                         .size(50.dp), // shortcut for width & height
                 )
                 Image(
                     painter = painterResource(id = R.drawable.stopwatch_stop),
                     contentDescription = null,
                     modifier = Modifier
-                        .alpha(if(startedStopWatch_btns)1f else 0f)
+                        .alpha(if (startedStopWatch_btns) 1f else 0f)
                         .size(50.dp), // shortcut for width & height
                 )
             }
@@ -217,7 +255,9 @@ fun GymApp() {
                         .alpha(0F),
                 ) { }
                 Button(
-                    onClick = { stopWatch.reset(); startedGif = false; startedStopWatch_btns = false },
+                    onClick = {
+                        stopWatch.reset(); startedGif = false; startedStopWatch_btns = false
+                    },
                     modifier = Modifier
                         .size(50.dp)
                         .alpha(0F),
@@ -225,6 +265,12 @@ fun GymApp() {
             }
         }
         Spacer(Modifier.height(20.dp))
+    }
+
+    Column(
+        modifier = Modifier.fillMaxWidth()
+            .padding(top = 420.dp)
+    ) {
         // SetTime Container ----------------------------------------------------------------
         Box(
             modifier = Modifier.fillMaxWidth(),
