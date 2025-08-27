@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.example.fitnessapp.util.SoundPlayer
 import android.content.Context
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.*
 import java.time.Instant
@@ -17,6 +18,8 @@ import java.util.*
 
 class StopWatch {
     var formattedTime by mutableStateOf("00:00:00")
+    var formattedEndTimeList = mutableStateListOf<String>()  // better than array
+    var counterEndTime = 0
 
     private var coroutineScope = CoroutineScope(Dispatchers.Main)
     private var isActive = false
@@ -27,7 +30,7 @@ class StopWatch {
 
     fun start(){
         if(isActive) return
-
+        counterEndTime++
         lastTimeStamp = System.currentTimeMillis()
         isActive = true
         job = CoroutineScope(Dispatchers.Main).launch {
@@ -58,6 +61,11 @@ class StopWatch {
         job?.cancel()
         timeMillis = 0L
         lastTimeStamp = 0L
+
+        // save the set time before resetting
+        formattedEndTimeList.add(formattedTime)
+        counterEndTime = formattedEndTimeList.size
+
         formattedTime = "00:00:00"
         isActive = false
     }

@@ -32,12 +32,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -78,7 +80,6 @@ import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import kotlinx.coroutines.delay
-import org.intellij.lang.annotations.JdkConstants
 
 class GymActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.P)
@@ -113,7 +114,8 @@ fun GymApp() {
     // StopWatch Container -----------------------------------------------------------------
     var started by remember { mutableStateOf(false) }
     var startedGif by remember { mutableStateOf(false) }
-    var startedStopWatch_btns by remember { mutableStateOf(false) }
+    var startedStopWatchBtns by remember { mutableStateOf(false) }
+    var counter = 1
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -145,7 +147,7 @@ fun GymApp() {
                         // show the Row after this
                         started = true
                         startedGif = true
-                        startedStopWatch_btns = true
+                        startedStopWatchBtns = true
                     },
                     modifier = Modifier
                         .align(Alignment.Center)
@@ -201,6 +203,7 @@ fun GymApp() {
                 )
             }
         }
+        // Timer Text-------------------------------------------------------------------------------
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -230,14 +233,14 @@ fun GymApp() {
                     painter = painterResource(id = R.drawable.stopwatch_pause),
                     contentDescription = null,
                     modifier = Modifier
-                        .alpha(if (startedStopWatch_btns) 1f else 0f)
+                        .alpha(if (startedStopWatchBtns) 1f else 0f)
                         .size(50.dp), // shortcut for width & height
                 )
                 Image(
                     painter = painterResource(id = R.drawable.stopwatch_stop),
                     contentDescription = null,
                     modifier = Modifier
-                        .alpha(if (startedStopWatch_btns) 1f else 0f)
+                        .alpha(if (startedStopWatchBtns) 1f else 0f)
                         .size(50.dp), // shortcut for width & height
                 )
             }
@@ -256,7 +259,7 @@ fun GymApp() {
                 ) { }
                 Button(
                     onClick = {
-                        stopWatch.reset(); startedGif = false; startedStopWatch_btns = false
+                        stopWatch.reset(); startedGif = false; startedStopWatchBtns = false
                     },
                     modifier = Modifier
                         .size(50.dp)
@@ -266,30 +269,70 @@ fun GymApp() {
         }
         Spacer(Modifier.height(20.dp))
     }
-
     Column(
         modifier = Modifier.fillMaxWidth()
             .padding(top = 420.dp)
     ) {
         // SetTime Container ----------------------------------------------------------------
         Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .wrapContentHeight()
+                .wrapContentWidth(),
+        ){
+            // Body Images
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
             ) {
-                repeat(3) {
-                    Image(
-                        painter = painterResource(id = R.drawable.set_time_body),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .height(50.dp)
-                            .width(300.dp),
-                    )
-                    Spacer(modifier = Modifier.height(15.dp))
+                Column(
+                    modifier = Modifier.wrapContentWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    repeat(3) {
+                        Image(
+                            painter = painterResource(id = R.drawable.set_time_body),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .height(50.dp)
+                                .width(300.dp),
+                        )
+                        Spacer(modifier = Modifier.height(15.dp))
+                    }
                 }
             }
+            val testList = listOf<String>("00:01", "00:02", "00:03")
+            // Body Text
+            Column(
+                modifier = Modifier.wrapContentWidth()
+                    .padding(top = 15.dp)
+                    .padding(start = 65.dp),
+            ) {
+                Spacer(Modifier.height(0.dp))
+                stopWatch.formattedEndTimeList.forEachIndexed { index, endTime ->
+                    Row(
+                        modifier = Modifier
+                            .wrapContentHeight()
+                            .wrapContentWidth(),
+                    ) {
+                        Text(
+                            text = "Set Time: ",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 15.sp,
+                            color = Color(0xFF4F2912)
+                        )
+                        Text(
+                            text = endTime,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 15.sp,
+                            color = Color(0xFF4F2912)
+                        )
+                    }
+                    if (index != stopWatch.formattedEndTimeList.size - 1) {
+                        Spacer(Modifier.height(48.dp))
+                    }
+                }
+            }
+
         }
     }
 
