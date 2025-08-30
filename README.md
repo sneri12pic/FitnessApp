@@ -37,21 +37,24 @@ This Fitness Application is inspired by the robust features and user-friendly de
 ### Rest Times are in Progress
 
 
-**Cycling -- Coming Soon**
 
-**Hiking**
+
+## Cycling -- Coming Soon
+
+
+## Hiking
 
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/893be624-c7c0-4154-ab20-c845f5cc69a1" />
 
 
 
 
-*  **Profile Tracking:** Track completed workouts and sort them by day.
+##  **Profile Tracking:** Track completed workouts and sort them by day.
 
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/fd0b41d4-e145-476c-9e7d-c0045f81b67b" />
 
 
-* **Settings**
+## **Settings**
 
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/b7b368c0-9c9c-44c4-bdb7-1de7d2b23766" />
 
