@@ -1,24 +1,15 @@
 package com.example.fitnessapp.workouts
 
-import android.os.Build
-import androidx.annotation.RequiresApi
+
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.example.fitnessapp.util.SoundPlayer
-import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.*
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 class StopWatch {
     var formattedTime by mutableStateOf("00:00:00")
-    var formattedEndTimeList = mutableStateListOf<String>()  // better than array
+    var formattedEndTimeList = mutableStateListOf<String>()
     var counterEndTime = 0
 
     private var coroutineScope = CoroutineScope(Dispatchers.Main)
