@@ -25,16 +25,23 @@ This Fitness Application is inspired by the robust features and user-friendly de
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/207c0ac0-c145-4436-9c59-58a0f5d47295" />
 
 
- **Running Or Jogging**
+## Running Or Jogging 
  
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/05fc2de5-c433-495a-a9cb-379d15c54c39" />
 
+## GYM
+<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/30bd9431-07b4-498a-a670-dd3dc1bf6603" />
+<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/e1f46268-ee27-4d8f-950e-3fd470dda216" />
+<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/cdb49c3d-8e28-4640-8473-36ebe8de400b" />
+** Rest Times are in Progress**
+
+**Cycling -- Coming Soon**
 
 **Hiking**
 
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/893be624-c7c0-4154-ab20-c845f5cc69a1" />
 
-**Cycling -- Coming Soon**
+
 
 
 *  **Profile Tracking:** Track completed workouts and sort them by day.
