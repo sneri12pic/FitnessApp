@@ -34,7 +34,7 @@ This Fitness Application is inspired by the robust features and user-friendly de
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/e1f46268-ee27-4d8f-950e-3fd470dda216" />
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/cdb49c3d-8e28-4640-8473-36ebe8de400b" />
 
-- # Rest Times are in Progress
+### Rest Times are in Progress
 
 
 **Cycling -- Coming Soon**
