@@ -15,7 +15,13 @@ This Fitness Application is inspired by the robust features and user-friendly de
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/2b0f198e-df8d-4570-905c-732de72495ea" />
 
 
-<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/0fe6512e-3dde-4524-8e55-66c5d3a22c9a" />
+<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/b745af9c-7c4e-433b-9487-201505369ff6" />
+<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/8285a44a-9144-4a78-b9ba-2be9d5a34d39" />
+<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/13451d7f-6a9c-4022-a908-edef1d5ec60c" />
+
+
+
+
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/83511ddc-92f6-430d-98ed-cf8e0c68bd16" />
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/7d5d796e-d204-4c04-980b-b9ef1df60b65" />
 
