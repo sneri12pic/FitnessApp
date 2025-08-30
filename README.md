@@ -22,7 +22,8 @@ This Fitness Application is inspired by the robust features and user-friendly de
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/cfa54563-d960-43ca-bba5-e457a86dd308" />
 
 *  **Workout Options:** Running/Jogging, Hiking, and Cycling.
-<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/5739a8d5-1271-4499-94e8-345d960c80dc" />
+<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/207c0ac0-c145-4436-9c59-58a0f5d47295" />
+
 
  **Running Or Jogging**
  
