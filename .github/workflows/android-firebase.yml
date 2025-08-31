@@ -46,7 +46,7 @@ jobs:
 
       # 6. Build the debug APK
       - name: Build Debug APK
-        run: ./gradlew assembleDebug -x processDebugGoogleServices
+        run: ./gradlew assembleDebug
 
       # 7. Deploy to Firebase App Distribution
       - name: Deploy to Firebase App Distribution
