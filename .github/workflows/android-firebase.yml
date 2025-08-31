@@ -37,6 +37,9 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x gradlew
 
+      - name: Setup Firebase config
+        run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > app/google-services.json
+
       # 4. Build the debug APK
       - name: Build Debug APK
         run: ./gradlew assembleDebug
