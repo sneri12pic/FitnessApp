@@ -38,9 +38,11 @@ jobs:
         run: chmod +x gradlew
 
       # 5. Skip Google Services plugin (CI-friendly)
+
       - name: Disable Google Services plugin
         run: |
-          sed -i '/apply plugin: "com.google.gms.google-services"/d' app/build.gradle
+          sed -i '/id("com.google.gms.google-services")/d' app/build.gradle.kts
+      
 
       # 6. Build the debug APK
       - name: Build Debug APK
