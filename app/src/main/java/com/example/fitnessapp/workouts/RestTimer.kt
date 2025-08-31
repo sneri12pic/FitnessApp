@@ -1,6 +1,8 @@
 package com.example.fitnessapp.workouts
 
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -12,23 +14,21 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class RestTimer : ViewModel(){
+
+    val timerList = listOf(1L, 10L, 60L, 120L, 180L, 240L, 300L)
+    var formattedTime by mutableStateOf("00:00")
+    val restTimesList = mutableListOf<String>()
+
+    private val _isRunning = MutableStateFlow(false)
+    val isRunning = _isRunning.asStateFlow()
     private var defaultDuration : Long = 60L
     private val _remainingTime = MutableStateFlow<Long>(defaultDuration)
     val remainingTime = _remainingTime.asStateFlow()
-    val timerList = listOf(10L, 60L, 120L, 180L, 240L, 300L)
-    private val _isRunning = MutableStateFlow(false)
-    val isRunning = _isRunning.asStateFlow()
-
-
-    val restTimesList = mutableListOf<Long>()
-
     private var timerJob: Job? = null
 
     fun startTimer(durationInSeconds: Long? = null) {
         val duration = durationInSeconds ?: defaultDuration
 
-        // Add to the List for UI in StopWatch
-        restTimesList.add(duration)
 
         stopTimer()
         _remainingTime.value = duration
@@ -41,6 +41,10 @@ class RestTimer : ViewModel(){
             }
             _remainingTime.value = 0
             _isRunning.value = false
+
+            // Add to the List for UI in StopWatch with Formatted Time
+            formattedTime = formatTime(duration)
+            restTimesList.add(formattedTime)
         }
     }
 

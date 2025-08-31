@@ -1,5 +1,6 @@
 package com.example.fitnessapp.workouts
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -64,6 +65,7 @@ import com.example.fitnessapp.SettingsActivity
 import com.example.fitnessapp.util.SoundPlayer
 
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.seconds
 
 class GymActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.P)
@@ -83,6 +85,7 @@ fun GymApp() {
     val stopWatch = remember { StopWatch() }
     var startedStopWatchBtns by remember { mutableStateOf(false) }
     var showRest by remember { mutableStateOf(false) }
+    val restTimer = remember { RestTimer() }
 
     // Background Image --------------------------------------------------------------------
     Box(
@@ -96,6 +99,7 @@ fun GymApp() {
             contentScale = ContentScale.Crop // scales and crops to fill the container
         )
     }
+    // Stop Watch-----------------------------------------------------------------------------------
     if (!showRest) {
         Box(
             modifier = Modifier.fillMaxSize()
@@ -240,14 +244,20 @@ fun GymApp() {
                         Arrangement.Center
                     ) {
                         Button(
-                            onClick = { stopWatch.pause(); startedGif = false },
+                            onClick = {
+                                stopWatch.pause()
+                                startedGif = false
+                            },
                             modifier = Modifier
                                 .size(50.dp)
                                 .alpha(0F),
                         ) { }
                         Button(
                             onClick = {
-                                stopWatch.reset(); startedGif = false; startedStopWatchBtns = false; showRest = true;
+                                stopWatch.reset()
+                                startedGif = false
+                                startedStopWatchBtns = false
+                                showRest = true
                             },
                             modifier = Modifier
                                 .size(50.dp)
@@ -257,11 +267,12 @@ fun GymApp() {
                 }
                 Spacer(Modifier.height(20.dp))
             }
+            // Set Times Container
             Column(
                 modifier = Modifier.fillMaxWidth()
                     .padding(top = 420.dp)
             ) {
-                // SetTime Container ----------------------------------------------------------------
+                // SetTime Container
                 Box(
                     modifier = Modifier
                         .wrapContentHeight()
@@ -292,7 +303,7 @@ fun GymApp() {
 
                     val testTimerList = listOf<String>("120", "60", "180", "180")
 
-                    // Body Text
+                    // Body Text StopWatch
                     Column(
                         modifier = Modifier.wrapContentWidth()
                             .padding(top = 8.dp)
@@ -305,7 +316,19 @@ fun GymApp() {
                                     .wrapContentWidth(),
                             ) {
                                 Text(
-                                    text = "Set   " + index + " Time: ",
+                                    text = "Set   ",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 15.sp,
+                                    color = Color(0xFF4F2912)
+                                )
+                                Text(
+                                    text = "" + index + " ",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 15.sp,
+                                    color = Color(0, 255, 0)
+                                )
+                                Text(
+                                    text = ": ",
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 15.sp,
                                     color = Color(0xFF4F2912)
@@ -316,31 +339,59 @@ fun GymApp() {
                                     fontSize = 15.sp,
                                     color = Color(0xFF4F2912)
                                 )
+                                Image(
+                                    painter = painterResource(id = R.drawable.panel),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .height(50.dp)
+                                        .width(80.dp)
+                                        .padding(start = 40.dp),
+                                )
+
                             }
                             if (index != stopWatch.formattedEndTimeList.size - 1) {
                                 Spacer(Modifier.height(48.dp))
                             }
                         }
                     }
+                    // Body Text RestTimer
                     Column(
                         modifier = Modifier.wrapContentWidth()
                             .padding(top = 28.dp)
                             .padding(start = 65.dp),
                     ) {
-                        testTimerList.forEachIndexed { index, restTime ->
+                        restTimer.restTimesList.forEachIndexed { index, restTime ->
                             Row(
                                 modifier = Modifier
                                     .wrapContentHeight()
                                     .wrapContentWidth(),
                             ) {
                                 Text(
-                                    text = "Rest " + index + " Time: 02:00",
+                                    text = "Rest ",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 15.sp,
+                                    color = Color(0xFF4F2912)
+                                )
+                                Text(
+                                    text = "" + index + " ",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 15.sp,
+                                    color = Color(0, 255, 0)
+                                )
+                                Text(
+                                    text = ": ",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 15.sp,
+                                    color = Color(0xFF4F2912)
+                                )
+                                Text(
+                                    text = restTime,
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 15.sp,
                                     color = Color(0xFF4F2912)
                                 )
                             }
-                            if (index != testTimerList.size - 1) {
+                            if (index != restTimer.restTimesList.size - 1) {
                                 Spacer(Modifier.height(46.dp))
                             }
                         }
@@ -350,11 +401,12 @@ fun GymApp() {
             }
         }
     }
+    // Rest Timer-----------------------------------------------------------------------------------
     else{
-        val restTimer = remember { RestTimer() }
+
         var expanded by remember { mutableStateOf(false) }
         val remainingTime by restTimer.remainingTime.collectAsState()
-
+        var isStopped by remember { mutableStateOf(false) }
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -376,7 +428,9 @@ fun GymApp() {
                 )
                 Button(
                     onClick = {
-                        restTimer.startTimer(120)
+                        // Value of isRunning is false by default
+                        if(restTimer.isRunning.value){ restTimer.startTimer(120) }
+                        else{ restTimer.stopTimer(); isStopped = true; showRest = false }
                     },
                     modifier = Modifier
                         .padding(top = 15.dp)
@@ -445,11 +499,17 @@ fun GymApp() {
                 }
             }
         }
-        // Hide rest screen when timer is done
+        /*// Hide rest screen when timer is done
         LaunchedEffect(remainingTime) {
             if (remainingTime == 0L) {
                 showRest = false // only leave the rest screen when the flag is true
             }
+        }*/
+
+
+        if(remainingTime == 0L && isStopped){
+            showRest = false // only leave the rest screen when the flag is true
+            isStopped = false
         }
     }
 
