@@ -11,33 +11,50 @@ This Fitness Application is inspired by the robust features and user-friendly de
 
 *  **Calorie Counter:** Editable and updatable via the Home screen. With progress shown in arch.
   
-<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/3614fb9e-4be1-4766-934e-958988985ba4" />
-<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/0fe6512e-3dde-4524-8e55-66c5d3a22c9a" />
-<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/83511ddc-92f6-430d-98ed-cf8e0c68bd16" />
-<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/7d5d796e-d204-4c04-980b-b9ef1df60b65" />
+<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/6576eea6-39a0-451a-a11c-7341b2e27ab1" />
+<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/2b0f198e-df8d-4570-905c-732de72495ea" />
 
+<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/490e9bb8-12b6-477e-8bbb-ac8ec4a999c2" />
+<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/1342e0d3-2150-4706-bd8c-1fd94f180994" />
+
+<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/30cc00bf-4a67-4e5c-ac4e-ffbea5c7cc19" />
+
+<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/cfa54563-d960-43ca-bba5-e457a86dd308" />
 
 *  **Workout Options:** Running/Jogging, Hiking, and Cycling.
-<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/5739a8d5-1271-4499-94e8-345d960c80dc" />
+<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/207c0ac0-c145-4436-9c59-58a0f5d47295" />
 
- **Running Or Jogging**
+
+## Running Or Jogging 
  
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/05fc2de5-c433-495a-a9cb-379d15c54c39" />
 
+## GYM
+<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/30bd9431-07b4-498a-a670-dd3dc1bf6603" />
+<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/e1f46268-ee27-4d8f-950e-3fd470dda216" />
+<img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/cdb49c3d-8e28-4640-8473-36ebe8de400b" />
 
-**Hiking**
+### Rest Times are in Progress
+
+
+
+
+## Cycling -- Coming Soon
+
+
+## Hiking
 
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/893be624-c7c0-4154-ab20-c845f5cc69a1" />
 
-**Cycling -- Coming Soon**
 
 
-*  **Profile Tracking:** Track completed workouts and sort them by day.
+
+##  **Profile Tracking:** Track completed workouts and sort them by day.
 
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/fd0b41d4-e145-476c-9e7d-c0045f81b67b" />
 
 
-* **Settings**
+## **Settings**
 
 <img width="350" height="1032" alt="image" src="https://github.com/user-attachments/assets/b7b368c0-9c9c-44c4-bdb7-1de7d2b23766" />
 
