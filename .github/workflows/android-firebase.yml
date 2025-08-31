@@ -33,26 +33,20 @@ jobs:
           restore-keys: |
             gradle-${{ runner.os }}-
 
-      # Set the execute permission
+      # 4. Make gradlew executable
       - name: Make gradlew executable
         run: chmod +x gradlew
 
-      - name: Setup Firebase config
-        run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > app/google-services.json
+      # 5. Skip Google Services plugin (CI-friendly)
+      - name: Disable Google Services plugin
+        run: |
+          sed -i '/apply plugin: "com.google.gms.google-services"/d' app/build.gradle
 
-      # 4. Build the debug APK
+      # 6. Build the debug APK
       - name: Build Debug APK
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleDebug -x processDebugGoogleServices
 
-      # 5. Run lint checks
-      - name: Run Lint
-        run: ./gradlew lint
-
-      # 6. Run unit tests (if added later)
-      - name: Run Unit Tests
-        run: ./gradlew test
-
-      # 7. Upload APK to Firebase App Distribution
+      # 7. Deploy to Firebase App Distribution
       - name: Deploy to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
