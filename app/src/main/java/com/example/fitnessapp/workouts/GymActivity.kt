@@ -56,16 +56,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.room.util.TableInfo
 import com.example.fitnessapp.ExerciseActivity
 import com.example.fitnessapp.HomeActivity
 import com.example.fitnessapp.ProfileActivity
 import com.example.fitnessapp.R
 import com.example.fitnessapp.SettingsActivity
 import com.example.fitnessapp.util.SoundPlayer
-
 import kotlinx.coroutines.delay
-import kotlin.time.Duration.Companion.seconds
+
+
+import androidx.compose.material3.*
+import androidx.compose.ui.text.TextStyle
+
 
 class GymActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.P)
@@ -287,6 +289,9 @@ fun GymApp() {
                             modifier = Modifier.wrapContentWidth(),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
+                            // Addition of variables to wrapHeight without additional 35dp in the end
+                            var times = 4
+                            var counter = 1
                             repeat(4) {
                                 Image(
                                     painter = painterResource(id = R.drawable.set_time_body),
@@ -295,9 +300,94 @@ fun GymApp() {
                                         .height(50.dp)
                                         .width(300.dp),
                                 )
-                                Spacer(modifier = Modifier.height(15.dp))
+                                if (counter < times) {
+                                    Spacer(modifier = Modifier.height(15.dp))
+                                }
+                                counter++
                             }
                         }
+                        Column(
+                            modifier = Modifier.wrapContentWidth()
+                                .align(Alignment.TopEnd)
+                                .padding(top = 10.dp)
+                                .padding(end = 60.dp),
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.repsbody),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .height(30.dp)
+                                    .wrapContentWidth()
+                            )
+                            Spacer(modifier = Modifier.height(35.dp))
+                            // Addition of variables to wrapHeight without additional 35dp in the end
+                            var times = 3
+                            var counter = 1
+                            repeat(times) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.repsbody),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .height(30.dp)
+                                        .wrapContentWidth()
+                                )
+                                if (counter < times) {
+                                    Spacer(modifier = Modifier.height(35.dp))
+                                }
+                                counter++
+                            }
+                        }
+                        Column(
+                            modifier = Modifier.wrapContentWidth()
+                                .align(Alignment.TopEnd)
+                                .padding(top = 10.dp)
+                                .padding(end = 140.dp),
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.moodbody),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .wrapContentHeight()
+                                    .width(55.dp)
+                            )
+                            Spacer(modifier = Modifier.height(35.dp))
+                            // Addition of variables to wrapHeight without additional 35dp in the end
+                            var times = 3
+                            var counter = 1
+                            repeat(times) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.moodbody),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .wrapContentHeight()
+                                        .width(55.dp)
+                                )
+                                var text by remember { mutableStateOf("") }
+                                if (counter < times) {
+                                    Spacer(modifier = Modifier.height(35.dp))
+                                }
+                                counter++
+                            }
+                        }
+                        /*var text by remember { mutableStateOf("") }
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(end = 50.dp),
+                            contentAlignment = Alignment.CenterEnd
+                        ) {
+                            TextField(
+                                modifier = Modifier
+                                    .height(15.dp)
+                                    .width(50.dp),
+                                value = text,
+                                onValueChange = { text = it },
+                                label = { Text("") },
+                                placeholder = { Text("Reps") },
+                                textStyle = TextStyle(fontSize = 16.sp),
+                                singleLine = true
+                            )
+                        }*/
                     }
                     val testList = listOf<String>("00:01", "00:02", "00:03", "00:04")
 
@@ -309,6 +399,7 @@ fun GymApp() {
                             .padding(top = 8.dp)
                             .padding(start = 65.dp),
                     ) {
+                        //stopWatch.formattedEndTimeList.forEachIndexed { index, endTime ->
                         stopWatch.formattedEndTimeList.forEachIndexed { index, endTime ->
                             Row(
                                 modifier = Modifier
@@ -339,15 +430,6 @@ fun GymApp() {
                                     fontSize = 15.sp,
                                     color = Color(0xFF4F2912)
                                 )
-                                Image(
-                                    painter = painterResource(id = R.drawable.panel),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .height(50.dp)
-                                        .width(80.dp)
-                                        .padding(start = 40.dp),
-                                )
-
                             }
                             if (index != stopWatch.formattedEndTimeList.size - 1) {
                                 Spacer(Modifier.height(48.dp))
