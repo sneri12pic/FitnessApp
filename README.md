@@ -140,12 +140,6 @@ This design allows each user to have a persistent profile and maintain daily cal
 
 ---
 
-## Screenshots
-
-*(Add screenshots of Home, Exercise, Profile screens here if possible)*
-
----
-
 ## Image Sources
 
 * Running: [Runner's World](https://www.runnersworld.com/uk/health/a39979994/things-ive-learned-about-pain-management-as-a-runner)
