@@ -138,6 +138,7 @@ This design allows each user to have a persistent profile and maintain daily cal
 * Location-based workout suggestions.
 * Daily sort and filter in Profile.
 
+
 ---
 
 ## Image Sources
