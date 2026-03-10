@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +18,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,6 +31,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -36,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fitnessapp.R
+import kotlin.math.roundToInt
 
 class homeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,12 +52,15 @@ class homeActivity : ComponentActivity() {
     }
 }
 
-private val ScreenColor = Color(0xFFFFF6F0)
+private val ScreenColor = Color(0xFFF8D4C5)
 private val CardColor = Color(0xFFFEEADC)
 private val BorderColor = Color(0x80F07167)
 private val HeaderColor = Color(0xFF72473A)
 private val BodyColor = Color(0xFF7D635A)
 private val RankColor = Color(0xFFE1AD2D)
+private val ActionButtonColor = Color(0xFFF8C6B5)
+private val AccentColor = Color(0xFFF07167)
+private val ProgressTrackColor = Color(0xFFA58D86)
 
 @Composable
 fun NewHomeScreen() {
@@ -59,18 +68,173 @@ fun NewHomeScreen() {
         modifier = Modifier.fillMaxSize(),
         color = ScreenColor
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 12.dp, vertical = 14.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            WorkoutTimeCard()
-            StreakCard()
-            TeamChallengeCard()
-            RecentCard()
+        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+            val reservedBottomHeight = maxHeight * 0.15f
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(start = 20.dp, end = 20.dp, top = 30.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                GreetingHeader()
+                TodaysProgressCard()
+                StreakCard()
+                WorkoutTimeCard()
+                TeamChallengeCard()
+                RecentCard()
+                Spacer(modifier = Modifier.height(reservedBottomHeight))
+            }
         }
+    }
+}
+
+@Composable
+private fun GreetingHeader() {
+    Column(modifier = Modifier.padding(start = 6.dp, bottom = 6.dp)) {
+        Text(
+            text = "Good afternoon",
+            color = Color(0xFF4F2912),
+            fontSize = 42.sp,
+            lineHeight = 42.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(6.dp))
+        Text(
+            text = "Here's your progress for today.",
+            color = Color(0xFF5E3A2D),
+            fontSize = 16.sp,
+            lineHeight = 18.sp
+        )
+    }
+}
+
+@Composable
+private fun TodaysProgressCard() {
+    val progress = 0.68f
+    val steps = 7532
+
+    HomeCard {
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "Today's Progress",
+                        color = HeaderColor,
+                        fontSize = 16.sp,
+                        lineHeight = 18.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(
+                        text = String.format("%,d steps", steps),
+                        color = BodyColor,
+                        fontSize = 14.sp
+                    )
+                }
+                ProgressCircle(progress = progress)
+            }
+
+            ProgressBar(progress = progress)
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                ProgressActionButton(
+                    label = "Step View",
+                    iconRes = R.drawable.new_home_steps_icon,
+                    modifier = Modifier.weight(1f)
+                )
+                ProgressActionButton(
+                    label = "Log Activity",
+                    iconRes = R.drawable.new_home_log_activity_icon,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ProgressCircle(progress: Float) {
+    val progressPercent = (progress.coerceIn(0f, 1f) * 100).roundToInt()
+
+    Box(
+        modifier = Modifier.size(54.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            drawCircle(
+                brush = Brush.verticalGradient(
+                    listOf(
+                        AccentColor.copy(alpha = 0.5f),
+                        Color(0xFF8A413B).copy(alpha = 0.5f)
+                    )
+                )
+            )
+        }
+        Box(
+            modifier = Modifier
+                .size(49.dp)
+                .clip(CircleShape)
+                .background(Color(0xFFF4CEC0)),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "$progressPercent%",
+                color = HeaderColor,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
+    }
+}
+
+@Composable
+private fun ProgressBar(progress: Float) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(4.dp)
+            .clip(RoundedCornerShape(4.dp))
+            .background(ProgressTrackColor.copy(alpha = 0.7f))
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(progress.coerceIn(0f, 1f))
+                .height(4.dp)
+                .background(AccentColor)
+        )
+    }
+}
+
+@Composable
+private fun ProgressActionButton(label: String, iconRes: Int, modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier
+            .height(40.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .background(ActionButtonColor)
+            .padding(horizontal = 10.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(id = iconRes),
+            contentDescription = null,
+            modifier = Modifier.size(24.dp)
+        )
+        Spacer(modifier = Modifier.width(10.dp))
+        Text(
+            text = label,
+            color = HeaderColor,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium
+        )
     }
 }
 
@@ -85,7 +249,7 @@ private fun WorkoutTimeCard() {
                 Text(
                     text = "Workout time",
                     color = HeaderColor,
-                    fontSize = 16.sp,
+                    fontSize = 18.sp,
                     lineHeight = 18.sp,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -93,7 +257,7 @@ private fun WorkoutTimeCard() {
                 Text(
                     text = "Gym Time: 2hr 30 min",
                     color = BodyColor,
-                    fontSize = 10.sp
+                    fontSize = 14.sp
                 )
             }
 
@@ -127,6 +291,44 @@ private fun WorkoutTimeCard() {
 @Composable
 private fun StreakCard() {
     HomeCard {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 10.dp),
+                horizontalArrangement = Arrangement.End
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.new_home_streak_idle),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                        .padding(end = 6.dp)
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.new_home_streak_idle),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                        .padding(end = 6.dp)
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.new_home_streak_done),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                        .padding(end = 6.dp)
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.new_home_streak_done),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                        .padding(end = 6.dp)
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.new_home_streak_idle),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                        .padding(end = 6.dp)
+                )
+            }
+        }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -144,36 +346,8 @@ private fun StreakCard() {
                 Text(
                     text = "3 of 4 planned sessions completed",
                     color = BodyColor,
-                    fontSize = 10.sp,
-                    lineHeight = 12.sp
-                )
-            }
-
-            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                Image(
-                    painter = painterResource(id = R.drawable.new_home_streak_idle),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp)
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.new_home_streak_idle),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp)
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.new_home_streak_done),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp)
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.new_home_streak_done),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp)
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.new_home_streak_idle),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp)
+                    fontSize = 14.sp,
+                    lineHeight = 10.sp
                 )
             }
         }
@@ -260,6 +434,7 @@ private fun RecentCard() {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
+                    fontWeight = FontWeight.SemiBold,
                     text = "Recent: Yesterday",
                     color = HeaderColor,
                     fontSize = 12.sp
@@ -297,10 +472,11 @@ private fun HomeCard(content: @Composable () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .shadow(4.dp, RoundedCornerShape(8.dp))
             .clip(RoundedCornerShape(8.dp))
             .background(CardColor)
             .border(1.dp, BorderColor, RoundedCornerShape(8.dp))
-            .padding(horizontal = 16.dp, vertical = 10.dp)
+            .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
         content()
     }
