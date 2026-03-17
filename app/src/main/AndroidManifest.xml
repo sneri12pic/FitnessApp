@@ -28,6 +28,9 @@
             android:name=".workouts.GymActivity"
             android:exported="true" />
         <activity
+            android:name=".workouts.WorkoutSessionActivity"
+            android:exported="false" />
+        <activity
             android:name=".ExerciseActivity"
             android:exported="false" />
         <activity
