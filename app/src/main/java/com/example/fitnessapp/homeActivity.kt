@@ -1,14 +1,17 @@
 package com.example.fitnessapp.workouts
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,12 +21,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -40,6 +43,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.fitnessapp.ExerciseActivity
+import com.example.fitnessapp.ProfileActivity
 import com.example.fitnessapp.R
 import kotlin.math.roundToInt
 
@@ -47,7 +52,23 @@ class homeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            NewHomeScreen()
+            NewHomeScreen(
+                onStartWorkoutClick = {
+                    startActivity(Intent(this, WorkoutSessionActivity::class.java))
+                },
+                onStepViewClick = {
+                    startActivity(Intent(this, ProfileActivity::class.java))
+                },
+                onLogActivityClick = {
+                    startActivity(Intent(this, ExerciseActivity::class.java))
+                },
+                onWorkoutTimeClick = {
+                    startActivity(Intent(this, WorkoutSessionActivity::class.java))
+                },
+                onRecentClick = {
+                    startActivity(Intent(this, ProfileActivity::class.java))
+                }
+            )
         }
     }
 }
@@ -63,7 +84,13 @@ private val AccentColor = Color(0xFFF07167)
 private val ProgressTrackColor = Color(0xFFA58D86)
 
 @Composable
-fun NewHomeScreen() {
+fun NewHomeScreen(
+    onStartWorkoutClick: () -> Unit = {},
+    onStepViewClick: () -> Unit = {},
+    onLogActivityClick: () -> Unit = {},
+    onWorkoutTimeClick: () -> Unit = {},
+    onRecentClick: () -> Unit = {}
+) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = ScreenColor
@@ -79,11 +106,15 @@ fun NewHomeScreen() {
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 GreetingHeader()
-                TodaysProgressCard()
+                StartWorkoutButton(onClick = onStartWorkoutClick)
+                TodaysProgressCard(
+                    onStepViewClick = onStepViewClick,
+                    onLogActivityClick = onLogActivityClick
+                )
                 StreakCard()
-                WorkoutTimeCard()
+                WorkoutTimeCard(onClick = onWorkoutTimeClick)
                 TeamChallengeCard()
-                RecentCard()
+                RecentCard(onClick = onRecentClick)
                 Spacer(modifier = Modifier.height(reservedBottomHeight))
             }
         }
@@ -111,7 +142,31 @@ private fun GreetingHeader() {
 }
 
 @Composable
-private fun TodaysProgressCard() {
+private fun StartWorkoutButton(onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color(0xFFEF8C6E),
+            contentColor = Color.White
+        ),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Text(
+            text = "Start Workout",
+            fontSize = 17.sp,
+            fontWeight = FontWeight.SemiBold
+        )
+    }
+}
+
+@Composable
+private fun TodaysProgressCard(
+    onStepViewClick: () -> Unit,
+    onLogActivityClick: () -> Unit
+) {
     val progress = 0.68f
     val steps = 7532
 
@@ -148,11 +203,13 @@ private fun TodaysProgressCard() {
                 ProgressActionButton(
                     label = "Step View",
                     iconRes = R.drawable.new_home_steps_icon,
+                    onClick = onStepViewClick,
                     modifier = Modifier.weight(1f)
                 )
                 ProgressActionButton(
                     label = "Log Activity",
                     iconRes = R.drawable.new_home_log_activity_icon,
+                    onClick = onLogActivityClick,
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -214,12 +271,18 @@ private fun ProgressBar(progress: Float) {
 }
 
 @Composable
-private fun ProgressActionButton(label: String, iconRes: Int, modifier: Modifier = Modifier) {
+private fun ProgressActionButton(
+    label: String,
+    iconRes: Int,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Row(
         modifier = modifier
             .height(40.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(ActionButtonColor)
+            .clickable(onClick = onClick)
             .padding(horizontal = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -239,8 +302,8 @@ private fun ProgressActionButton(label: String, iconRes: Int, modifier: Modifier
 }
 
 @Composable
-private fun WorkoutTimeCard() {
-    HomeCard {
+private fun WorkoutTimeCard(onClick: () -> Unit) {
+    HomeCard(modifier = Modifier.clickable(onClick = onClick)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
@@ -426,8 +489,8 @@ private fun TeamScoreRow(rank: String, totalScore: String, chartRes: Int) {
 }
 
 @Composable
-private fun RecentCard() {
-    HomeCard {
+private fun RecentCard(onClick: () -> Unit) {
+    HomeCard(modifier = Modifier.clickable(onClick = onClick)) {
         Column(modifier = Modifier.fillMaxWidth()) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -468,9 +531,12 @@ private fun RecentCard() {
 }
 
 @Composable
-private fun HomeCard(content: @Composable () -> Unit) {
+private fun HomeCard(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .shadow(4.dp, RoundedCornerShape(8.dp))
             .clip(RoundedCornerShape(8.dp))
